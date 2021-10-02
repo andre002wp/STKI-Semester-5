@@ -42,9 +42,9 @@ class Ui(QtWidgets.QMainWindow):
         self.document_list = self.findChild(QtWidgets.QTextEdit, 'txt_document')
         filelist = ""
         size_adjust = 0
-        for file in self.openFileDialog:
+        for i,file in enumerate(self.openFileDialog):
             _tempname = file.split("/")
-            filelist += _tempname[len(_tempname)-1]+"\n"
+            filelist += f"Document {i} :"+_tempname[len(_tempname)-1]+"\n"
             size_adjust +=20
 
         self.document_list.setMaximumSize(99999, size_adjust)
@@ -78,9 +78,9 @@ class Ui(QtWidgets.QMainWindow):
                 file_path = f"{file}"
                 # call read text file function
                 tokens_doc.append(self.read_text_file(file_path))
+                print("\nRead from filepath = ",file_path)
                 print(f"dokumen {len(tokens_doc)} :\n",tokens_doc[len(tokens_doc)-1])
                 text_hasil += f"Read from filepath : {file_path}\n"
-                print("\nRead from filepath = ",file_path)
 
         for item in tokens_doc:
             merge.update(item)
@@ -186,7 +186,7 @@ class Ui(QtWidgets.QMainWindow):
         text = text.lower()
 
         # Hapus simbol
-        sentence = text.replace("("," ").replace(")"," ").replace("\""," ").replace("?"," ").replace("-", " ").replace("/", " ").replace("\n", " ").replace("."," ")
+        sentence = text.replace("("," ").replace(")"," ").replace("\""," ").replace("?"," ").replace("-", " ").replace("/", " ").replace("\n", " ").replace("."," ").replace("!"," ")
 
         factory = StemmerFactory()
         stemmer = factory.create_stemmer()
