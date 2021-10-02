@@ -1,3 +1,4 @@
+from logging import NullHandler
 from PyQt5 import QtWidgets, uic, QtGui, QtCore
 from PyQt5.QtWidgets import QFileDialog
 import sys
@@ -10,6 +11,7 @@ class Ui(QtWidgets.QMainWindow):
     openFileDialog = []
     selected_keyword = []
     stopwords = []
+    result = {}
     def __init__(self):
         super(Ui, self).__init__()
         uic.loadUi('SKTI Tugas 2.ui', self)
@@ -19,6 +21,15 @@ class Ui(QtWidgets.QMainWindow):
         self.btnCheckKeys = self.findChild(QtWidgets.QPushButton, 'checkKeysbtn')
         self.btnCheckKeys.clicked.connect(self.CheckKey) 
 
+        self.result_table = self.findChild(QtWidgets.QTableWidget, 'result_table')
+        self.result_table.setColumnWidth(0,250)
+        self.result_table.setColumnWidth(0,250)
+        self.result_table.setColumnWidth(1,400)
+        self.result_table.setColumnWidth(2,100)
+        self.result_table.setColumnWidth(3,100)
+        self.result_table.setColumnWidth(4,100)
+        self.result_table.setColumnWidth(5,100)
+        self.result_table.setColumnWidth(6,300)
         self.show()
 
     def OpenFile(self):
@@ -37,8 +48,11 @@ class Ui(QtWidgets.QMainWindow):
         self.selected_keyword = self.Keywords.toPlainText()
         self.selected_keyword = self.selected_keyword.split()
 
+        keys = []
         for i,keyword in enumerate(self.Keywords.toPlainText().split()):
+            keys.append(keyword)
             text_hasil += f"key {i} : {keyword}\n"
+        self.result['keyword'] = keys
         print(self.Keywords.toPlainText())
 
         with open('stopword_tweet_pilkada_DKI_2017.csv', mode='r') as file:
@@ -78,6 +92,7 @@ class Ui(QtWidgets.QMainWindow):
                     temp_TF_d_keyword.append(0)# im lazy
             term_Frequency.append(temp_TF_d_keyword)
         text_hasil += f"TF\n{term_Frequency}\n"
+        self.result['TF'] = term_Frequency
         print("TF")
         print(term_Frequency)
 
@@ -90,7 +105,8 @@ class Ui(QtWidgets.QMainWindow):
                 if (frequency>0):
                     count += 1
             document_Frequency.append(count)
-        text_hasil += f"dwF\n{document_Frequency}\n"
+        text_hasil += f"dF\n{document_Frequency}\n"
+        self.result['dF'] = document_Frequency
         print("dwF")
         print(document_Frequency)
 
@@ -105,6 +121,7 @@ class Ui(QtWidgets.QMainWindow):
             except:
                 D_over_df.append(len(tokens_doc))## todo
         text_hasil += f"D/df\n{D_over_df}\n"
+        self.result['D_over_df'] = D_over_df
         print("D/df")
         print(D_over_df)
 
@@ -115,6 +132,7 @@ class Ui(QtWidgets.QMainWindow):
         for i,keys in enumerate(document_Frequency):
             idf_keys.append(math.log(D_over_df[i],10))## todo
         text_hasil += f"IDF\n{idf_keys}\n"
+        self.result['IDF'] = idf_keys
         print("IDF")
         print(idf_keys)
 
@@ -123,6 +141,7 @@ class Ui(QtWidgets.QMainWindow):
         for num in idf_keys:
             idf_plus.append(num+1)
         text_hasil += f"idf+1\n{idf_plus}\n"
+        self.result['idf_plus'] = idf_plus
         print("idf+1")
         print(idf_plus)
 
@@ -134,12 +153,24 @@ class Ui(QtWidgets.QMainWindow):
                 temp_weight_for_key_in_doc.append(document*idf_plus[i])
             Weight_keys.append(temp_weight_for_key_in_doc)
         text_hasil += f"Weight\n{Weight_keys}\n"
+        self.result['Weight'] = Weight_keys
         print("Weight")
         print(Weight_keys)
+        
+        self.setTable()
 
-
-        self.Hasil = self.findChild(QtWidgets.QTextEdit, 'txt_hasil')
-        self.Hasil.setPlainText(text_hasil)
+    def setTable(self):
+        self.result_table.setRowCount(len(self.result['keyword']))
+        rows = 0
+        for i,key in enumerate(self.result['keyword']):
+            self.result_table.setItem(rows,0,QtWidgets.QTableWidgetItem(str(self.result['keyword'][i])))
+            self.result_table.setItem(rows,1,QtWidgets.QTableWidgetItem(str(self.result['TF'][i])))
+            self.result_table.setItem(rows,2,QtWidgets.QTableWidgetItem(str(self.result['dF'][i])))
+            self.result_table.setItem(rows,3,QtWidgets.QTableWidgetItem(str(self.result['D_over_df'][i])))
+            self.result_table.setItem(rows,4,QtWidgets.QTableWidgetItem(str(self.result['IDF'][i])))
+            self.result_table.setItem(rows,5,QtWidgets.QTableWidgetItem(str(self.result['idf_plus'][i])))
+            self.result_table.setItem(rows,6,QtWidgets.QTableWidgetItem(str(self.result['Weight'][i])))
+            rows+=1
         
 
     def sanitize(self,text):
