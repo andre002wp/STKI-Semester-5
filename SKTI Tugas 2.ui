@@ -27,7 +27,36 @@
     <property name="bottomMargin">
      <number>40</number>
     </property>
-    <item row="15" column="0" colspan="2">
+    <item row="12" column="1">
+     <widget class="QTextEdit" name="txt_keyword">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="placeholderText">
+       <string>add keyword(seperate by space)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="0" colspan="2">
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Preferred</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>15</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="16" column="0" colspan="2">
      <widget class="QTableWidget" name="result_table">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
@@ -72,29 +101,6 @@
       </column>
      </widget>
     </item>
-    <item row="2" column="0" colspan="2">
-     <widget class="QPushButton" name="checkKeysbtn">
-      <property name="text">
-       <string>Check Keys</string>
-      </property>
-     </widget>
-    </item>
-    <item row="13" column="0" colspan="2">
-     <spacer name="verticalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Preferred</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>15</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="1" column="0" colspan="2">
      <widget class="QPushButton" name="openFilebtn">
       <property name="text">
@@ -102,26 +108,20 @@
       </property>
      </widget>
     </item>
-    <item row="12" column="1">
-     <widget class="QTextEdit" name="txt_keyword">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>35</height>
-       </size>
-      </property>
-      <property name="placeholderText">
-       <string>add keyword(seperate by space)</string>
+    <item row="2" column="0" colspan="2">
+     <widget class="QPushButton" name="checkKeysbtn">
+      <property name="text">
+       <string>Check Keys</string>
       </property>
      </widget>
     </item>
     <item row="12" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Keyword :</string>
+       <string>Keyword        :</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
       <property name="margin">
        <number>0</number>
@@ -159,6 +159,35 @@
        </size>
       </property>
      </spacer>
+    </item>
+    <item row="14" column="1">
+     <widget class="QTextEdit" name="txt_document">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="placeholderText">
+       <string>(Silahkan Load Dokumen Terlebih Dahulu)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Document list :</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

@@ -37,8 +37,18 @@ class Ui(QtWidgets.QMainWindow):
         files = QFileDialog.getOpenFileNames(self,"select txt File",os.getcwd(),"Text Files (*.txt)")
         self.openFileDialog = files[0]
         filepath = self.openFileDialog[0]
-        print(self.openFileDialog)
-        print("\nfilepath 1 = ",filepath)
+        # print(self.openFileDialog)
+        # print("\nfilepath 1 = ",filepath)
+        self.document_list = self.findChild(QtWidgets.QTextEdit, 'txt_document')
+        filelist = ""
+        size_adjust = 0
+        for file in self.openFileDialog:
+            _tempname = file.split("/")
+            filelist += _tempname[len(_tempname)-1]+"\n"
+            size_adjust +=20
+
+        self.document_list.setMaximumSize(99999, size_adjust)
+        self.document_list.setText(str(filelist))
         print()
     
     def CheckKey(self):
