@@ -1,4 +1,3 @@
-from logging import NullHandler
 from PyQt5 import QtWidgets, uic, QtGui, QtCore
 from PyQt5.QtWidgets import QFileDialog
 import sys
@@ -156,7 +155,7 @@ class Ui(QtWidgets.QMainWindow):
         self.result['Weight'] = Weight_keys
         print("Weight")
         print(Weight_keys)
-        
+
         self.setTable()
 
     def setTable(self):
