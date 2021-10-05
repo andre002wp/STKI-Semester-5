@@ -128,7 +128,7 @@ class Ui(QtWidgets.QMainWindow):
             try:
                 D_over_df.append(len(tokens_doc)/keys)## todo
             except:
-                D_over_df.append(len(tokens_doc))## todo
+                D_over_df.append(0)## todo
         text_hasil += f"D/df\n{D_over_df}\n"
         self.result['D_over_df'] = D_over_df
         print("D/df")
@@ -139,7 +139,11 @@ class Ui(QtWidgets.QMainWindow):
 
         idf_keys = []
         for i,keys in enumerate(document_Frequency):
-            idf_keys.append(math.log(D_over_df[i],10))## todo
+            try:
+                idf_keys.append(math.log(D_over_df[i],10))## todo
+            except:
+                idf_keys.append(0)## todo
+            
         text_hasil += f"IDF\n{idf_keys}\n"
         self.result['IDF'] = idf_keys
         print("IDF")
@@ -169,9 +173,10 @@ class Ui(QtWidgets.QMainWindow):
         self.setTable()
 
     def setTable(self):
-        self.result_table.setRowCount(len(self.result['keyword']))
+        self.result_table.setRowCount(len(self.result['keyword'])+2)
         rows = 0
         for i,key in enumerate(self.result['keyword']):
+            self.result_table.setSpan(rows,0,1,1)
             self.result_table.setItem(rows,0,QtWidgets.QTableWidgetItem(str(self.result['keyword'][i])))
             self.result_table.setItem(rows,1,QtWidgets.QTableWidgetItem(str(self.result['TF'][i])))
             self.result_table.setItem(rows,2,QtWidgets.QTableWidgetItem(str(self.result['dF'][i])))
@@ -180,6 +185,16 @@ class Ui(QtWidgets.QMainWindow):
             self.result_table.setItem(rows,5,QtWidgets.QTableWidgetItem(str(self.result['idf_plus'][i])))
             self.result_table.setItem(rows,6,QtWidgets.QTableWidgetItem(str(self.result['Weight'][i])))
             rows+=1
+        
+        self.result_table.setSpan(rows,0,1,6)
+        self.result_table.setItem(rows,0,QtWidgets.QTableWidgetItem(f"Toootalsss : "))
+        self.result_table.setSpan(rows+1,0,1,6)
+        self.result_table.setItem(rows+1,0,QtWidgets.QTableWidgetItem(f"Dokument paling relevan : ulala"))
+        
+
+        
+        
+        
         
 
     def sanitize(self,text):
@@ -196,11 +211,14 @@ class Ui(QtWidgets.QMainWindow):
     
     def word_count(self,file):
         word_count = dict()
+        # last
         isi_file =self.sanitize(file)
         words = isi_file.split()
         for word in words:
+            #dibawah tokenisasi
             if(self.is_stopword(word)==0):
                 # print(word,"is not on stopword")
+                # bawa keatas
                 if word in word_count:
                     word_count[word] += 1
                 else:
