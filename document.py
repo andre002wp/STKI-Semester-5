@@ -5,9 +5,10 @@ import json
 from typing import Dict
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
+
 class Document:
-    filename : str = "<From string>"
-    filepath : str = "<Not from file>"
+    filename: str = "<From string>"
+    filepath: str = "<Not from file>"
 
     raw: str = None
     # Case folding
@@ -44,9 +45,8 @@ class Document:
         f = Document()
         f.raw = source
         f.folded = f.raw.lower()
-        f.no_number = re.sub(r"\d+", "", f.folded)
-        f.no_symbol = f.no_number.translate(
-            str.maketrans("", "", string.punctuation))
+        f.no_number = re.sub(r"\d+", " ", f.folded)
+        f.no_symbol = re.sub("[^a-zA-Z0-9\n\.]", " ", f.no_number)
         f.trimmed = f.no_symbol.strip()
         f.tokenized = f.trimmed.split()
 
