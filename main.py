@@ -6,7 +6,7 @@ import numpy as np
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 from document import Document
-from boolean_model import BooleanModelInvertedIndex
+from inverted_index import BooleanModelInvertedIndex
 
 
 class Ui(QtWidgets.QMainWindow):

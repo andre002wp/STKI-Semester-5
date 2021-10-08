@@ -4,6 +4,8 @@ from document import Document
 
 # MAKE TOKENIZED sebelum di stem dkk
 
+USE_FILENAME_INSTEAD_ID = True
+
 
 class InvertedIndexRow:
     id_file: int = None
@@ -30,7 +32,10 @@ class InvertedIndexRow:
         return d
 
     def pretty(self) -> str:
-        return f"<Id{self.id_file},{self.keyword_freq},{str(self.keyword_pos)}>"
+        if USE_FILENAME_INSTEAD_ID:
+            return f"<{self.filename},{self.keyword_freq},{str(self.keyword_pos)}>"
+        else:
+            return f"<Id{self.id_file},{self.keyword_freq},{str(self.keyword_pos)}>"
 
 
 class BooleanModelInvertedIndex:  # Inverted Index
