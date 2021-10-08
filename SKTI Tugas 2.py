@@ -44,7 +44,12 @@ class Ui(QtWidgets.QMainWindow):
         size_adjust = 0
         for i,file in enumerate(self.openFileDialog):
             _tempname = file.split("/")
-            filelist += f"Document {i}: "+_tempname[len(_tempname)-1]+"\n"
+
+            file_content = str(self.read_text_file(file))
+
+            filelist += f"[{i}] "+_tempname[len(_tempname)-1] + ":" + "\n"
+            filelist += "\t" + file_content+ "\n"
+            filelist += "\n"
             size_adjust +=20
 
         self.document_list.setMaximumSize(99999, size_adjust)
