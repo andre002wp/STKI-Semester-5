@@ -45,6 +45,35 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Document list :</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextEdit" name="txt_document">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="placeholderText">
+           <string>(Silahkan Load Dokumen Terlebih Dahulu)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <property name="topMargin">
            <number>0</number>
@@ -85,35 +114,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Document list :</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTextEdit" name="txt_document">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="placeholderText">
-           <string>(Silahkan Load Dokumen Terlebih Dahulu)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -134,48 +134,113 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QTableWidget" name="result_table">
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="currentIndex">
+           <number>1</number>
           </property>
-          <attribute name="horizontalHeaderVisible">
-           <bool>true</bool>
-          </attribute>
-          <column>
-           <property name="text">
-            <string>Keyword</string>
+          <widget class="QWidget" name="tab">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>TF</string>
+           <attribute name="title">
+            <string>File</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>1</horstretch>
+             <verstretch>1</verstretch>
+            </sizepolicy>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Df</string>
+           <property name="maximumSize">
+            <size>
+             <width>543</width>
+             <height>600</height>
+            </size>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>D/Df</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>IDF</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>IDF+1</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>W</string>
-           </property>
-          </column>
+           <attribute name="title">
+            <string>TF/IDF</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QTableWidget" name="result_table">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>321</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>9999999</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <attribute name="horizontalHeaderCascadingSectionResizes">
+               <bool>false</bool>
+              </attribute>
+              <column>
+               <property name="text">
+                <string>Keyword</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>TF</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Df</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>D/Df</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>IDF</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>IDF+1</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>W</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_3">
+           <attribute name="title">
+            <string>Inverted Index</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_4">
+           <attribute name="title">
+            <string>Incident Matrix</string>
+           </attribute>
+          </widget>
          </widget>
         </item>
        </layout>
