@@ -9,6 +9,9 @@ from document import Document
 
 
 class Ui(QtWidgets.QMainWindow):
+    table_result: QtCore.QObject
+    widget_docs_list: QtCore.QObject
+
     def __init__(self):
         super(Ui, self).__init__()
         uic.loadUi('main.ui', self)
@@ -23,16 +26,16 @@ class Ui(QtWidgets.QMainWindow):
         self.widget_docs_list = self.findChild(
             QtWidgets.QTextEdit, 'txt_document')
 
-        self.widget_result_tbl = self.findChild(
+        self.table_result = self.findChild(
             QtWidgets.QTableWidget, 'result_table')
-        self.widget_result_tbl.setColumnWidth(0, 250)
-        self.widget_result_tbl.setColumnWidth(0, 250)
-        self.widget_result_tbl.setColumnWidth(1, 400)
-        self.widget_result_tbl.setColumnWidth(2, 100)
-        self.widget_result_tbl.setColumnWidth(3, 100)
-        self.widget_result_tbl.setColumnWidth(4, 100)
-        self.widget_result_tbl.setColumnWidth(5, 100)
-        self.widget_result_tbl.setColumnWidth(6, 300)
+        self.table_result.setColumnWidth(0, 250)
+        self.table_result.setColumnWidth(0, 250)
+        self.table_result.setColumnWidth(1, 400)
+        self.table_result.setColumnWidth(2, 100)
+        self.table_result.setColumnWidth(3, 100)
+        self.table_result.setColumnWidth(4, 100)
+        self.table_result.setColumnWidth(5, 100)
+        self.table_result.setColumnWidth(6, 300)
         self.show()
 
     def OpenFile(self):
