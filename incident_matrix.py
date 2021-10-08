@@ -1,6 +1,6 @@
 from os import path
 from document import Document
-
+import re
 
 # MAKE TOKENIZED sebelum di stem dkk
 
@@ -33,3 +33,4 @@ class BooleanModelIncidentMatrix:  # Incident Matrix
                     foundIndex.append(doci)
 
             self.incident_matrix[word] = foundIndex
+
