@@ -1,16 +1,22 @@
 from PyQt5 import QtWidgets, uic, QtGui, QtCore
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QTableWidget
 import sys
 import os
 import numpy as np
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 from document import Document
+from boolean_model import BooleanModelInvertedIndex
 
 
 class Ui(QtWidgets.QMainWindow):
-    table_result: QtCore.QObject
+    table_result: QTableWidget
+    inverted_index_table: QTableWidget
+
     widget_docs_list: QtCore.QObject
+
+    documents: list[Document] = None
+    inverted_strategy: BooleanModelInvertedIndex = None
 
     def __init__(self):
         super(Ui, self).__init__()
@@ -36,20 +42,45 @@ class Ui(QtWidgets.QMainWindow):
         self.table_result.setColumnWidth(4, 100)
         self.table_result.setColumnWidth(5, 100)
         self.table_result.setColumnWidth(6, 300)
+
+        self.inverted_index_table = self.findChild(
+            QtWidgets.QTableWidget, 'inverted_index_table')
+
         self.show()
 
     def OpenFile(self):
         files = QFileDialog.getOpenFileNames(
             self, "select txt File", os.getcwd(), "Text Files (*.txt)")
 
+        self.documents = []
+
+        # Preprocessing
         filelist = ""
         for file in files[0]:
             _d = Document.from_file(file)
+            self.documents.append(_d)
             _d_as_str = str(_d)
 
             filelist += f"{_d.filename} {_d_as_str}\n\n=======================\n\n"
-
         self.widget_docs_list.setText(str(filelist))
+
+        self.doInvertedIndex()
+
+    def doInvertedIndex(self):
+        # Inverted Index
+        self.inverted_strategy = BooleanModelInvertedIndex()
+        self.inverted_strategy.index(self.documents)
+
+        self.inverted_index_table.setRowCount(
+            len(self.inverted_strategy.inverted_index_table))
+        for i, key in enumerate(self.inverted_strategy.inverted_index_table):
+            it = self.inverted_strategy.inverted_index_table[key]
+
+            self.inverted_index_table.setItem(
+                i, 0, QtWidgets.QTableWidgetItem(key))
+
+            self.inverted_index_table.setItem(
+                i, 1, QtWidgets.QTableWidgetItem(self.inverted_strategy.pretty_inverted_index_row_list_by_key(key)))
 
     def CheckKey(self):
         pass
