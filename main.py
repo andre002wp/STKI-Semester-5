@@ -4,7 +4,6 @@ import sys
 import os
 import numpy as np
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
-import csv
 
 from document import Document
 
