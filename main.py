@@ -11,15 +11,15 @@ from incident_matrix import BooleanModelIncidentMatrix
 
 
 class Ui(QtWidgets.QMainWindow):
-    table_result: QTableWidget
-    tbl_inverted: QTableWidget
-    tbl_incident: QTableWidget
+    table_result: 'QTableWidget'
+    tbl_inverted: 'QTableWidget'
+    tbl_incident: 'QTableWidget'
 
-    widget_docs_list: QtCore.QObject
+    widget_docs_list: 'QtCore.QObject'
 
-    documents: list[Document] = None
-    inverted_strategy: BooleanModelInvertedIndex = None
-    incident_strategy: BooleanModelIncidentMatrix = None
+    documents: 'list[Document]' = None
+    inverted_strategy: 'BooleanModelInvertedIndex' = None
+    incident_strategy: 'BooleanModelIncidentMatrix' = None
 
     def __init__(self):
         super(Ui, self).__init__()
