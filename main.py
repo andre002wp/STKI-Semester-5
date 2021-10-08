@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, uic, QtGui, QtCore
-from PyQt5.QtWidgets import QFileDialog, QTableWidget
+from PyQt5.QtWidgets import QFileDialog, QTableWidget, QTableWidgetItem
 import sys
 import os
 import numpy as np
@@ -7,16 +7,19 @@ from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 from document import Document
 from inverted_index import BooleanModelInvertedIndex
+from incident_matrix import BooleanModelIncidentMatrix
 
 
 class Ui(QtWidgets.QMainWindow):
     table_result: QTableWidget
-    inverted_index_table: QTableWidget
+    tbl_inverted: QTableWidget
+    tbl_incident: QTableWidget
 
     widget_docs_list: QtCore.QObject
 
     documents: list[Document] = None
     inverted_strategy: BooleanModelInvertedIndex = None
+    incident_strategy: BooleanModelIncidentMatrix = None
 
     def __init__(self):
         super(Ui, self).__init__()
@@ -43,8 +46,10 @@ class Ui(QtWidgets.QMainWindow):
         self.table_result.setColumnWidth(5, 100)
         self.table_result.setColumnWidth(6, 300)
 
-        self.inverted_index_table = self.findChild(
+        self.tbl_inverted = self.findChild(
             QtWidgets.QTableWidget, 'inverted_index_table')
+        self.tbl_incident = self.findChild(
+            QtWidgets.QTableWidget, 'incident_matrix_table')
 
         self.show()
 
@@ -65,22 +70,51 @@ class Ui(QtWidgets.QMainWindow):
         self.widget_docs_list.setText(str(filelist))
 
         self.doInvertedIndex()
+        self.doIncidentMatrix()
 
     def doInvertedIndex(self):
         # Inverted Index
         self.inverted_strategy = BooleanModelInvertedIndex()
         self.inverted_strategy.index(self.documents)
 
-        self.inverted_index_table.setRowCount(
+        self.tbl_inverted.setRowCount(
             len(self.inverted_strategy.inverted_index_table))
         for i, key in enumerate(self.inverted_strategy.inverted_index_table):
             it = self.inverted_strategy.inverted_index_table[key]
 
-            self.inverted_index_table.setItem(
+            self.tbl_inverted.setItem(
                 i, 0, QtWidgets.QTableWidgetItem(key))
 
-            self.inverted_index_table.setItem(
+            self.tbl_inverted.setItem(
                 i, 1, QtWidgets.QTableWidgetItem(self.inverted_strategy.pretty_inverted_index_row_list_by_key(key)))
+
+    def doIncidentMatrix(self):
+        self.incident_strategy = BooleanModelIncidentMatrix()
+        self.incident_strategy.index(self.documents)
+
+        self.tbl_incident.setRowCount(
+            len(self.incident_strategy.incident_matrix))
+        self.tbl_incident.setColumnCount(
+            len(self.incident_strategy.documents) + 1)
+
+        for i, it in enumerate(self.incident_strategy.documents):
+            self.tbl_incident.setHorizontalHeaderItem(
+                i + 1, QTableWidgetItem(it.filename))
+
+        for i, word in enumerate(self.incident_strategy.uniq_words):
+            self.tbl_incident.setItem(
+                i, 0, QtWidgets.QTableWidgetItem(word))
+
+            for j, doc in enumerate(self.incident_strategy.documents):
+                if j in self.incident_strategy.incident_matrix[word]:
+                    self.tbl_incident.setItem(
+                        i, j + 1, QtWidgets.QTableWidgetItem("1"))
+                else:
+                    self.tbl_incident.setItem(
+                        i, j + 1, QtWidgets.QTableWidgetItem("0"))
+
+        # Set nama kolom
+        # self.tbl_incident.Column
 
     def CheckKey(self):
         pass

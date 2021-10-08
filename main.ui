@@ -302,7 +302,7 @@
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QTableWidget" name="inverted_index_table_2">
+             <widget class="QTableWidget" name="incident_matrix_table">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
                 <horstretch>0</horstretch>
