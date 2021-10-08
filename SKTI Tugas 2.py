@@ -45,14 +45,19 @@ class Ui(QtWidgets.QMainWindow):
         for i,file in enumerate(self.openFileDialog):
             _tempname = file.split("/")
 
+            raw_content = str(open(file, 'r').readlines())
             file_content = str(self.read_text_file(file))
+            sanitized = str(self.sanitize(file_content))
 
             filelist += f"[{i}] "+_tempname[len(_tempname)-1] + ":" + "\n"
-            filelist += "\t" + file_content+ "\n"
+            filelist += "\tRaw: " + raw_content + "\n"
+            filelist += "\tFolded: " + raw_content.lower() + "\n"
+            filelist += "\tSanitized: " + sanitized + "\n"
+            filelist += "\tWord Count: " + file_content+ "\n"
             filelist += "\n"
             size_adjust +=20
 
-        self.document_list.setMaximumSize(99999, size_adjust)
+        # self.document_list.setMaximumSize(99999, size_adjust)
         self.document_list.setText(str(filelist))
         print()
     
@@ -210,7 +215,8 @@ class Ui(QtWidgets.QMainWindow):
 
         factory = StemmerFactory()
         stemmer = factory.create_stemmer()
-        stemmer.stem(sentence)
+        sentence = stemmer.stem(sentence)
+        print(sentence)
 
         return sentence.replace("  ", " ")
     
