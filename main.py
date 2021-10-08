@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, uic, QtGui, QtCore
-from PyQt5.QtWidgets import QFileDialog, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QFileDialog, QLabel, QTableWidget, QTableWidgetItem, QTextEdit
 import sys
 import os
 import numpy as np
@@ -17,9 +17,12 @@ class Ui(QtWidgets.QMainWindow):
 
     widget_docs_list: 'QtCore.QObject'
 
+    lbl_incident_result: 'QLabel'
+
     documents: 'list[Document]' = None
     inverted_strategy: 'BooleanModelInvertedIndex' = None
     incident_strategy: 'BooleanModelIncidentMatrix' = None
+    txt_keyword : 'QTextEdit' = None
 
     def __init__(self):
         super(Ui, self).__init__()
@@ -34,6 +37,8 @@ class Ui(QtWidgets.QMainWindow):
 
         self.widget_docs_list = self.findChild(
             QtWidgets.QTextEdit, 'txt_document')
+        self.lbl_incident_result = self.findChild(
+            QtWidgets.QLabel, 'lbl_incident_result')
 
         self.table_result = self.findChild(
             QtWidgets.QTableWidget, 'result_table')
@@ -50,6 +55,8 @@ class Ui(QtWidgets.QMainWindow):
             QtWidgets.QTableWidget, 'inverted_index_table')
         self.tbl_incident = self.findChild(
             QtWidgets.QTableWidget, 'incident_matrix_table')
+
+        self.txt_keyword = self.findChild(QtWidgets.QTextEdit, 'txt_keyword')
 
         self.show()
 
@@ -117,9 +124,19 @@ class Ui(QtWidgets.QMainWindow):
         # self.tbl_incident.Column
 
     def CheckKey(self):
-        pass
+        q = self.txt_keyword.toPlainText()
+        if self.incident_strategy == None:
+            print("Load file dulu")
+            return
+
+        result = self.incident_strategy.query(q)
+        incident_result = ""
+        for it in result:
+            incident_result += it.filename + "\n"
+        self.lbl_incident_result.setText(incident_result)
+
     #     text_hasil = ""
-    #     self.Keywords = self.findChild(QtWidgets.QTextEdit, 'txt_keyword')
+    #     
     #     self.selected_keyword = self.Keywords.toPlainText()
     #     self.selected_keyword = self.selected_keyword.split()
 
