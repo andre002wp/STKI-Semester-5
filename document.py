@@ -6,6 +6,9 @@ from typing import Dict
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 class Document:
+    filename : str = "<From string>"
+    filepath : str = "<Not from file>"
+
     raw: str = None
     # Case folding
     folded: str = None
@@ -31,7 +34,10 @@ class Document:
     def from_file(path: str) -> 'Document':
         p = Path(path)
         txt = p.read_text()
-        return Document.from_string(txt)
+        d = Document.from_string(txt)
+        d.filename = path.split("/")[-1]
+        d.filepath = path
+        return d
 
     @staticmethod
     def from_string(source: str) -> 'Document':

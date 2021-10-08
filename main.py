@@ -44,11 +44,10 @@ class Ui(QtWidgets.QMainWindow):
 
         filelist = ""
         for file in files[0]:
-            _filename = file.split("/")[-1]
             _d = Document.from_file(file)
             _d_as_str = str(_d)
 
-            filelist += f"{_filename} {_d_as_str}\n\n=======================\n\n"
+            filelist += f"{_d.filename} {_d_as_str}\n\n=======================\n\n"
 
         self.widget_docs_list.setText(str(filelist))
 
