@@ -5,7 +5,6 @@ import json
 from typing import Dict
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-
 class Document:
     raw: str = None
     # Case folding
@@ -79,7 +78,7 @@ class Document:
         return _kalimat.strip()
 
     def __str__(self) -> str:
-        return json.dumps(self.__dict__, sort_keys=False, indent=4)
+        return json.dumps(self.__dict__, indent=4)
 
     @staticmethod
     def count_word(list_of_word_lower: list[str]) -> dict[str, int]:
