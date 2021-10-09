@@ -17,7 +17,6 @@ class TF_IDF:
     def query(self, q: 'str') -> 'list[Document]':
         parsed = ApalahParser.parse(q)
         self.keywords:'list[str]'= []
-
         for i, token in enumerate(parsed.token):
             if not token.is_symbol:
                 self.keywords.append(token.token)
@@ -40,7 +39,7 @@ class TF_IDF:
             temp_TF_d_keyword = []
             for document in self.documents:
                 term_count = 0
-                for tokens in document.tokenized:
+                for tokens in document.stemmed:
                     if (key == tokens):
                         term_count +=1
                 if (term_count == 0):
@@ -101,7 +100,6 @@ class TF_IDF:
 
     def getTotal(self,document_weight):
         total = []
-        print(document_weight)
         for i,weight in enumerate(document_weight):
             if(i==0): # how do you declare 3int list then update the num
                 for num_single_weight in weight:
