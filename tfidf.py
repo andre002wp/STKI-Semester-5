@@ -29,7 +29,7 @@ class TF_IDF:
         self.idf_plus: 'list[float]' = self.getIDF_plus(self.idf)
         self.Weight: 'list[float]' = self.getWeight(self.term_Frequency,self.idf_plus)
         self.totalWeight:'list[float]' = self.getTotal(self.Weight)
-        self.result = self.getRelevance(self.totalWeight)
+        self.result:'list[str]' = self.getRelevance(self.totalWeight)
         return self.result_docs
         
 
