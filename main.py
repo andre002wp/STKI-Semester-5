@@ -4,7 +4,7 @@ import sys
 import os
 import numpy as np
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
-from tf_idf import TF_IDF
+from tfidf import TF_IDF
 
 from document import Document
 from inverted_index import BooleanModelInvertedIndex
