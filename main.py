@@ -23,7 +23,9 @@ class Ui(QtWidgets.QMainWindow):
     documents: 'list[Document]' = None
     inverted_strategy: 'BooleanModelInvertedIndex' = None
     incident_strategy: 'BooleanModelIncidentMatrix' = None
-    txt_keyword : 'QTextEdit' = None
+
+    txt_keyword: 'QTextEdit' = None
+    txt_query: 'QTextEdit' = None
 
     def __init__(self):
         super(Ui, self).__init__()
@@ -58,30 +60,13 @@ class Ui(QtWidgets.QMainWindow):
             QtWidgets.QTableWidget, 'incident_matrix_table')
 
         self.txt_keyword = self.findChild(QtWidgets.QTextEdit, 'txt_keyword')
+        self.txt_query = self.findChild(QtWidgets.QTextEdit, 'txt_query')
 
         self.show()
 
-    def OpenFile(self):
-        files = QFileDialog.getOpenFileNames(
-            self, "select txt File", os.getcwd(), "Text Files (*.txt)")
+    # ================ INDEXING =================
 
-        self.documents = []
-
-        # Preprocessing
-        filelist = ""
-        for file in files[0]:
-            _d = Document.from_file(file)
-            self.documents.append(_d)
-            _d_as_str = str(_d)
-
-            filelist += f"{_d.filename} {_d_as_str}\n\n=======================\n\n"
-        self.widget_docs_list.setText(str(filelist))
-
-        self.doInvertedIndex()
-        self.doIncidentMatrix()
-        self.doTFIDF()
-
-    def doInvertedIndex(self):
+    def indexInvertedIndex(self):
         # Inverted Index
         self.inverted_strategy = BooleanModelInvertedIndex()
         self.inverted_strategy.index(self.documents)
@@ -97,7 +82,7 @@ class Ui(QtWidgets.QMainWindow):
             self.tbl_inverted.setItem(
                 i, 1, QtWidgets.QTableWidgetItem(self.inverted_strategy.pretty_inverted_index_row_list_by_key(key)))
 
-    def doIncidentMatrix(self):
+    def indexIncidentMatrix(self):
         self.incident_strategy = BooleanModelIncidentMatrix()
         self.incident_strategy.index(self.documents)
 
@@ -122,27 +107,79 @@ class Ui(QtWidgets.QMainWindow):
                     self.tbl_incident.setItem(
                         i, j + 1, QtWidgets.QTableWidgetItem("0"))
 
-    def doTFIDF(self):
+    def indexTFIDF(self):
         self.tfidf = TF_IDF()
         self.tfidf.index(self.documents)
 
+    # ================ QUERYING =================
 
-    def CheckKey(self):
-        q = self.txt_keyword.toPlainText()
+    def queryIncidentMatrix(self):
+        q = self.txt_query.toPlainText()
+        if len(q) == 0:
+            print("Query tidak boleh kosong")
+            return
+
         if self.incident_strategy == None:
             print("Load file dulu")
             return
 
-        # result = self.incident_strategy.query(q)
+        if len(self.documents) == 0:
+            print("Dokumen belum di index")
+            return
+
+        result = self.incident_strategy.query(q)
+        if result == None:
+            result = []
+        incident_result = ""
+        for it in result:
+            incident_result += it.filename + "\n"
+        self.lbl_incident_result.setText(incident_result)
+
+    def queryTfIdf(self):
+        q = self.txt_keyword.toPlainText()
+        if len(q) == 0:
+            print("Keyword tidak boleh kosong")
+            return
+
+        if len(self.documents) == 0:
+            print("Dokumen belum di index")
+            return
+
         result2 = self.tfidf.query(q)
-        # incident_result = ""
-        # for it in result:
-        #     incident_result += it.filename + "\n"
-        # self.lbl_incident_result.setText(incident_result)
+        self.__setIDFTable(result2)
 
-        self.setIDFTable(result2)
+    # ================ BUTTON HANDLER =================
 
-    def setIDFTable(self,result2):
+    def CheckKey(self):
+        # Incident Matrix
+        self.queryIncidentMatrix()
+
+        # TF IDF
+        self.queryTfIdf()
+
+    def OpenFile(self):
+        files = QFileDialog.getOpenFileNames(
+            self, "select txt File", os.getcwd(), "Text Files (*.txt)")
+
+        self.documents = []
+
+        # Preprocessing
+        filelist = ""
+        for file in files[0]:
+            _d = Document.from_file(file)
+            self.documents.append(_d)
+            _d_as_str = str(_d)
+
+            filelist += f"{_d.filename} {_d_as_str}\n\n=======================\n\n"
+        self.widget_docs_list.setText(str(filelist))
+
+        self.indexInvertedIndex()
+        self.indexIncidentMatrix()
+        self.indexTFIDF()
+
+    # ================ HELPER =================
+
+    def __setIDFTable(self, result2):
         self.result_tableIDF.setRowCount(len(result2['keyword'])+2)
         rows = 0
         for i, key in enumerate(result2['keyword']):
@@ -165,7 +202,7 @@ class Ui(QtWidgets.QMainWindow):
 
         self.result_tableIDF.setSpan(rows, 0, 1, 6)
         self.result_tableIDF.setItem(
-            rows, 0, QtWidgets.QTableWidgetItem(str("Toootalsss : ")))
+            rows, 0, QtWidgets.QTableWidgetItem(str("Sum : ")))
         self.result_tableIDF.setItem(
             rows, 6, QtWidgets.QTableWidgetItem(str(result2['Toootalsss'])))
         self.result_tableIDF.setSpan(rows+1, 0, 1, 7)

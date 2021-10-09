@@ -128,7 +128,7 @@ class TF_IDF:
 
         relevance_to_text = ""
         for doc in relevance:
-            relevance_to_text +=  doc
+            relevance_to_text +=  doc + " "
 
         self.result_docs['most_relevance'] = relevance_to_text
         return relevance
