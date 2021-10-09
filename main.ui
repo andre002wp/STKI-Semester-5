@@ -146,7 +146,7 @@
            </sizepolicy>
           </property>
           <property name="currentIndex">
-           <number>3</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab">
            <property name="sizePolicy">
@@ -210,7 +210,7 @@
              <enum>QLayout::SetDefaultConstraint</enum>
             </property>
             <item>
-             <widget class="QTableWidget" name="result_table">
+             <widget class="QTableWidget" name="tf_idf_table">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
                 <horstretch>0</horstretch>
@@ -378,7 +378,7 @@
      <x>0</x>
      <y>0</y>
      <width>1190</width>
-     <height>24</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

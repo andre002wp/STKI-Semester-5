@@ -8,7 +8,7 @@ import math
 class TF_IDF:
     uniq_words: 'set[str]' = None  # Semua kata dalam semua dokumen
     documents: 'list[Document]' = None
-    result_docs : 'list[list]' = []
+    result_docs : 'dict[list]' = {}
 
     def index(self, _documents: 'list[Document]'):
         #document is passed
@@ -21,6 +21,7 @@ class TF_IDF:
         for i, token in enumerate(parsed.token):
             if not token.is_symbol:
                 self.keywords.append(token.token)
+        self.result_docs['keyword'] = self.keywords
 
         self.term_Frequency: 'list[int]' = self.getTF()
         self.document_Frequency: 'list[int]'  = self.getDF(self.term_Frequency)
@@ -28,6 +29,8 @@ class TF_IDF:
         self.idf: 'list[float]' = self.getIDF(self.document_Frequency,self.d_over_df)
         self.idf_plus: 'list[float]' = self.getIDF_plus(self.idf)
         self.Weight: 'list[float]' = self.getWeight(self.term_Frequency,self.idf_plus)
+        self.totalWeight:'list[float]' = self.getTotal(self.Weight)
+        self.result = self.getRelevance(self.totalWeight)
         return self.result_docs
         
 
@@ -76,7 +79,7 @@ class TF_IDF:
                 idf_keys.append(math.log(d_over_df[i],10))
             except:
                 idf_keys.append(0)
-        self.result_docs['idf_keys'] = idf_keys
+        self.result_docs['idf'] = idf_keys
         return idf_keys
         
     def getIDF_plus(self,idf_value):
@@ -93,8 +96,42 @@ class TF_IDF:
             for document in keys:
                 temp_weight_for_key_in_doc.append(document*idf_plus[i])
             Weight_keys.append(temp_weight_for_key_in_doc)
-        self.result_docs['Weight_keys'] = Weight_keys
+        self.result_docs['weight_keys'] = Weight_keys
         return Weight_keys
+
+    def getTotal(self,document_weight):
+        total = []
+        print(document_weight)
+        for i,weight in enumerate(document_weight):
+            if(i==0): # how do you declare 3int list then update the num
+                for num_single_weight in weight:
+                    total.append(num_single_weight)
+            else:
+                for j,num_single_weight in enumerate(weight):
+                    total[j]+=num_single_weight
+            print(total)
+        self.result_docs['Toootalsss'] = total
+        return total
+
+    def getRelevance(self,total):
+        relevance = []
+        maxscore = max(total)
+        
+        # for i,document_weight in self.result_docs['Toootalsss']:# cannot unpack shit
+        if(maxscore>0):
+            for i in range(len(total)):
+                if(self.result_docs['Toootalsss'][i]==maxscore):
+                    relevance.append(self.documents[i].filename)
+        else:
+            relevance.append("None of the documents is relevant")
+        
+
+        relevance_to_text = ""
+        for doc in relevance:
+            relevance_to_text +=  doc
+
+        self.result_docs['most_relevance'] = relevance_to_text
+        return relevance
 
         
 

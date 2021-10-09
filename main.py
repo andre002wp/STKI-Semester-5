@@ -41,16 +41,16 @@ class Ui(QtWidgets.QMainWindow):
         self.lbl_incident_result = self.findChild(
             QtWidgets.QLabel, 'lbl_incident_result')
 
-        self.table_result = self.findChild(
-            QtWidgets.QTableWidget, 'result_table')
-        self.table_result.setColumnWidth(0, 250)
-        self.table_result.setColumnWidth(0, 250)
-        self.table_result.setColumnWidth(1, 400)
-        self.table_result.setColumnWidth(2, 100)
-        self.table_result.setColumnWidth(3, 100)
-        self.table_result.setColumnWidth(4, 100)
-        self.table_result.setColumnWidth(5, 100)
-        self.table_result.setColumnWidth(6, 300)
+        self.result_tableIDF = self.findChild(
+            QtWidgets.QTableWidget, 'tf_idf_table')
+        self.result_tableIDF.setColumnWidth(0, 250)
+        self.result_tableIDF.setColumnWidth(0, 250)
+        self.result_tableIDF.setColumnWidth(1, 400)
+        self.result_tableIDF.setColumnWidth(2, 100)
+        self.result_tableIDF.setColumnWidth(3, 100)
+        self.result_tableIDF.setColumnWidth(4, 100)
+        self.result_tableIDF.setColumnWidth(5, 100)
+        self.result_tableIDF.setColumnWidth(6, 300)
 
         self.tbl_inverted = self.findChild(
             QtWidgets.QTableWidget, 'inverted_index_table')
@@ -141,36 +141,36 @@ class Ui(QtWidgets.QMainWindow):
         # self.lbl_incident_result.setText(incident_result)
 
         self.setIDFTable(result2)
-        print(result2)
 
     def setIDFTable(self,result2):
-        pass
-        # self.result_table.setRowCount(len(self.result['keyword'])+2)
-        # rows = 0
-        # for i, key in enumerate(self.result['keyword']):
-        #     self.result_table.setSpan(rows, 0, 1, 1)
-        #     self.result_table.setItem(
-        #         rows, 0, QtWidgets.QTableWidgetItem(str(self.result['keyword'][i])))
-        #     self.result_table.setItem(
-        #         rows, 1, QtWidgets.QTableWidgetItem(str(self.result['TF'][i])))
-        #     self.result_table.setItem(
-        #         rows, 2, QtWidgets.QTableWidgetItem(str(self.result['dF'][i])))
-        #     self.result_table.setItem(rows, 3, QtWidgets.QTableWidgetItem(
-        #         str(self.result['D_over_df'][i])))
-        #     self.result_table.setItem(
-        #         rows, 4, QtWidgets.QTableWidgetItem(str(self.result['IDF'][i])))
-        #     self.result_table.setItem(rows, 5, QtWidgets.QTableWidgetItem(
-        #         str(self.result['idf_plus'][i])))
-        #     self.result_table.setItem(
-        #         rows, 6, QtWidgets.QTableWidgetItem(str(self.result['Weight'][i])))
-        #     rows += 1
+        self.result_tableIDF.setRowCount(len(result2['keyword'])+2)
+        rows = 0
+        for i, key in enumerate(result2['keyword']):
+            self.result_tableIDF.setSpan(rows, 0, 1, 1)
+            self.result_tableIDF.setItem(
+                rows, 0, QtWidgets.QTableWidgetItem(str(result2['keyword'][i])))
+            self.result_tableIDF.setItem(
+                rows, 1, QtWidgets.QTableWidgetItem(str(result2['term_Frequency'][i])))
+            self.result_tableIDF.setItem(
+                rows, 2, QtWidgets.QTableWidgetItem(str(result2['document_Frequency'][i])))
+            self.result_tableIDF.setItem(rows, 3, QtWidgets.QTableWidgetItem(
+                str(result2['d_over_df'][i])))
+            self.result_tableIDF.setItem(
+                rows, 4, QtWidgets.QTableWidgetItem(str(result2['idf'][i])))
+            self.result_tableIDF.setItem(rows, 5, QtWidgets.QTableWidgetItem(
+                str(result2['idf_plus'][i])))
+            self.result_tableIDF.setItem(
+                rows, 6, QtWidgets.QTableWidgetItem(str(result2['weight_keys'][i])))
+            rows += 1
 
-        # self.result_table.setSpan(rows, 0, 1, 6)
-        # self.result_table.setItem(
-        #     rows, 0, QtWidgets.QTableWidgetItem(f"Toootalsss : "))
-        # self.result_table.setSpan(rows+1, 0, 1, 6)
-        # self.result_table.setItem(
-        #     rows+1, 0, QtWidgets.QTableWidgetItem(f"Dokument paling relevan : ulala"))
+        self.result_tableIDF.setSpan(rows, 0, 1, 6)
+        self.result_tableIDF.setItem(
+            rows, 0, QtWidgets.QTableWidgetItem(str("Toootalsss : ")))
+        self.result_tableIDF.setItem(
+            rows, 6, QtWidgets.QTableWidgetItem(str(result2['Toootalsss'])))
+        self.result_tableIDF.setSpan(rows+1, 0, 1, 7)
+        self.result_tableIDF.setItem(
+            rows+1, 0, QtWidgets.QTableWidgetItem(str(f"Dokument paling relevan : {result2['most_relevance']}")))
 
 
 app = QtWidgets.QApplication(sys.argv)
