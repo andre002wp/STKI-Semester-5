@@ -3,13 +3,12 @@ from PyQt5.QtWidgets import QFileDialog, QLabel, QTableWidget, QTableWidgetItem,
 import sys
 import os
 import numpy as np
-from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from tfidf import TF_IDF
 
 from document import Document
 from inverted_index import BooleanModelInvertedIndex
 from incident_matrix import BooleanModelIncidentMatrix
-
+from querier import BooleanModelQuerier
 
 class Ui(QtWidgets.QMainWindow):
     table_result: 'QTableWidget'
@@ -18,6 +17,7 @@ class Ui(QtWidgets.QMainWindow):
 
     widget_docs_list: 'QtCore.QObject'
 
+    lbl_boolean_query: 'QLabel'
     lbl_incident_result: 'QLabel'
     lbl_inverted_result: 'QLabel'
 
@@ -41,6 +41,9 @@ class Ui(QtWidgets.QMainWindow):
 
         self.widget_docs_list = self.findChild(
             QtWidgets.QTextEdit, 'txt_document')
+
+        self.lbl_boolean_query = self.findChild(
+            QtWidgets.QLabel, 'lbl_boolean_query')
         self.lbl_incident_result = self.findChild(
             QtWidgets.QLabel, 'lbl_incident_result')
         self.lbl_inverted_result = self.findChild(
@@ -119,16 +122,26 @@ class Ui(QtWidgets.QMainWindow):
     def queryBooleanModel(self):
         q = self.txt_query.toPlainText()
         if len(q) == 0:
-            print("Query tidak boleh kosong")
+            self.lbl_boolean_query.setText("Query tidak boleh kosong")
             return
 
         if self.incident_strategy == None:
-            print("Incident belum mengindex")
+            self.lbl_boolean_query.setText("Incident belum mengindex")
             return
 
         if self.inverted_strategy == None:
-            print("Inverted belum mengindex")
+            self.lbl_boolean_query.setText("Inverted belum mengindex")
             return
+
+        # Ini gak efisien, tapi untuk visualisasi query gaapalah
+        quer = BooleanModelQuerier(self.documents)
+        try:
+            binquery = quer.make_boolean_query(q).replace("0b", "")
+        except:
+            binquery = "Gagal memparse queri"
+            return
+        self.lbl_boolean_query.setText(binquery)
+        # End hack untuk visualisasi
 
         if len(self.documents) == 0:
             print("Dokumen belum di index")
@@ -142,11 +155,18 @@ class Ui(QtWidgets.QMainWindow):
                 incident_result += it.filename + "\n"
             return incident_result
 
-        resultIncident = self.incident_strategy.query(q)
-        self.lbl_incident_result.setText(prettyStrRes(resultIncident))
+        try:
+            resultIncident = self.incident_strategy.query(q)
+            self.lbl_incident_result.setText(prettyStrRes(resultIncident))
+        except:
+            self.lbl_incident_result.setText("Incident strategy gagal mengeval queri")
 
-        resultInverted = self.incident_strategy.query(q)
-        self.lbl_inverted_result.setText(prettyStrRes(resultInverted))
+        try:
+            resultInverted = self.incident_strategy.query(q)
+            self.lbl_inverted_result.setText(prettyStrRes(resultInverted))
+        except:
+            self.lbl_inverted_result.setText("Inverted strategy gagal mengeval queri")
+
 
     def queryTfIdf(self):
         q = self.txt_keyword.toPlainText()
@@ -154,7 +174,7 @@ class Ui(QtWidgets.QMainWindow):
             print("Keyword tidak boleh kosong")
             return
 
-        if len(self.documents) == 0:
+        if self.documents != None and len(self.documents) == 0:
             print("Dokumen belum di index")
             return
 
