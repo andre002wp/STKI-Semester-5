@@ -27,7 +27,7 @@ class BooleanModelQuerier:
             a = a | found
         return a
 
-    def query(self, q: 'str') -> 'list[Document]':
+    def make_boolean_query(self, q: 'str') -> 'str':
         parsed = ApalahParser.parse(q)
 
         for i, token in enumerate(parsed.token):
@@ -41,11 +41,16 @@ class BooleanModelQuerier:
             if it.is_symbol:
                 to_eval += it.token
             else:
-                to_eval += f" {it.binary} "
+                to_eval += f" {bin(it.binary)} "
 
         if to_eval == "":
             print("Invalid query")
             return
+
+        return to_eval
+
+    def query(self, q: 'str') -> 'list[Document]':
+        to_eval = self.make_boolean_query(q)
 
         res: 'int' = eval(to_eval)  # DANGER, tapi biar cepet yasudahlah
         print(to_eval, "==>", res)
