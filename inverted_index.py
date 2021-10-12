@@ -1,5 +1,6 @@
 from os import path
 from document import Document
+from querier import BooleanModelQuerier
 
 
 # MAKE TOKENIZED sebelum di stem dkk
@@ -51,6 +52,7 @@ class BooleanModelInvertedIndex:  # Inverted Index
             s += l.pretty() + " "
 
         return s.strip()
+    
 
     def index(self, _documents: 'list[Document]'):
         self.documents = _documents
@@ -71,3 +73,7 @@ class BooleanModelInvertedIndex:  # Inverted Index
                 if iirow.keyword_freq > 0:
                     docindexed.append(iirow)
             self.inverted_index_table[word] = docindexed
+
+    def query(self, q: 'str') -> 'list[Document]':
+        quer = BooleanModelQuerier(self.documents)
+        return quer.query(q)

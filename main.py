@@ -19,6 +19,7 @@ class Ui(QtWidgets.QMainWindow):
     widget_docs_list: 'QtCore.QObject'
 
     lbl_incident_result: 'QLabel'
+    lbl_inverted_result: 'QLabel'
 
     documents: 'list[Document]' = None
     inverted_strategy: 'BooleanModelInvertedIndex' = None
@@ -42,6 +43,8 @@ class Ui(QtWidgets.QMainWindow):
             QtWidgets.QTextEdit, 'txt_document')
         self.lbl_incident_result = self.findChild(
             QtWidgets.QLabel, 'lbl_incident_result')
+        self.lbl_inverted_result = self.findChild(
+            QtWidgets.QLabel, 'lbl_inverted_result')
 
         self.result_tableIDF = self.findChild(
             QtWidgets.QTableWidget, 'tf_idf_table')
@@ -113,27 +116,37 @@ class Ui(QtWidgets.QMainWindow):
 
     # ================ QUERYING =================
 
-    def queryIncidentMatrix(self):
+    def queryBooleanModel(self):
         q = self.txt_query.toPlainText()
         if len(q) == 0:
             print("Query tidak boleh kosong")
             return
 
         if self.incident_strategy == None:
-            print("Load file dulu")
+            print("Incident belum mengindex")
+            return
+
+        if self.inverted_strategy == None:
+            print("Inverted belum mengindex")
             return
 
         if len(self.documents) == 0:
             print("Dokumen belum di index")
             return
 
-        result = self.incident_strategy.query(q)
-        if result == None:
-            result = []
-        incident_result = ""
-        for it in result:
-            incident_result += it.filename + "\n"
-        self.lbl_incident_result.setText(incident_result)
+        def prettyStrRes(result: 'list[Document]'):
+            if result == None:
+                result = []
+            incident_result = ""
+            for it in result:
+                incident_result += it.filename + "\n"
+            return incident_result
+
+        resultIncident = self.incident_strategy.query(q)
+        self.lbl_incident_result.setText(prettyStrRes(resultIncident))
+
+        resultInverted = self.incident_strategy.query(q)
+        self.lbl_inverted_result.setText(prettyStrRes(resultInverted))
 
     def queryTfIdf(self):
         q = self.txt_keyword.toPlainText()
@@ -152,7 +165,7 @@ class Ui(QtWidgets.QMainWindow):
 
     def CheckKey(self):
         # Incident Matrix
-        self.queryIncidentMatrix()
+        self.queryBooleanModel()
 
         # TF IDF
         self.queryTfIdf()
