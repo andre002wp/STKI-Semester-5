@@ -4,7 +4,7 @@ import sys
 import os
 import numpy as np
 from tfidf import TF_IDF
-
+from jaccard import Jaccard
 from document import Document
 from inverted_index import BooleanModelInvertedIndex
 from incident_matrix import BooleanModelIncidentMatrix
@@ -117,6 +117,10 @@ class Ui(QtWidgets.QMainWindow):
         self.tfidf = TF_IDF()
         self.tfidf.index(self.documents)
 
+    def indexjaccard(self):
+        self.jaccard = Jaccard()
+        self.jaccard.index(self.documents)
+
     # ================ QUERYING =================
 
     def queryBooleanModel(self):
@@ -181,6 +185,18 @@ class Ui(QtWidgets.QMainWindow):
         result2 = self.tfidf.query(q)
         self.__setIDFTable(result2)
 
+    def queryJaccard(self):
+        q = self.txt_keyword.toPlainText()
+        if len(q) == 0:
+            print("Keyword tidak boleh kosong")
+            return
+
+        if self.documents != None and len(self.documents) == 0:
+            print("Dokumen belum di index")
+            return
+
+        resultJaccard = self.jaccard.query(q)
+
     # ================ BUTTON HANDLER =================
 
     def CheckKey(self):
@@ -189,6 +205,7 @@ class Ui(QtWidgets.QMainWindow):
 
         # TF IDF
         self.queryTfIdf()
+        self.queryJaccard()
 
     def OpenFile(self):
         files = QFileDialog.getOpenFileNames(
@@ -209,6 +226,7 @@ class Ui(QtWidgets.QMainWindow):
         self.indexInvertedIndex()
         self.indexIncidentMatrix()
         self.indexTFIDF()
+        self.indexjaccard()
 
     # ================ HELPER =================
 
