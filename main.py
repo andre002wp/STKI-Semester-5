@@ -3,11 +3,12 @@ from PyQt5.QtWidgets import QFileDialog, QLabel, QTableWidget, QTableWidgetItem,
 import sys
 import os
 import numpy as np
-from tfidf import TF_IDF
-from jaccard import Jaccard
 from document import Document
 from inverted_index import BooleanModelInvertedIndex
 from incident_matrix import BooleanModelIncidentMatrix
+from tfidf import TF_IDF
+from jaccard import Jaccard
+from n_gram import N_Gram
 from querier import BooleanModelQuerier
 
 class Ui(QtWidgets.QMainWindow):
@@ -121,6 +122,10 @@ class Ui(QtWidgets.QMainWindow):
         self.jaccard = Jaccard()
         self.jaccard.index(self.documents)
 
+    def indexN_gram(self):
+        self.n_gram = N_Gram()
+        self.n_gram.index(self.documents)
+
     # ================ QUERYING =================
 
     def queryBooleanModel(self):
@@ -182,8 +187,8 @@ class Ui(QtWidgets.QMainWindow):
             print("Dokumen belum di index")
             return
 
-        result2 = self.tfidf.query(q)
-        self.__setIDFTable(result2)
+        resultTfidf = self.tfidf.query(q)
+        self.__setIDFTable(resultTfidf)
 
     def queryJaccard(self):
         q = self.txt_keyword.toPlainText()
@@ -197,6 +202,18 @@ class Ui(QtWidgets.QMainWindow):
 
         resultJaccard = self.jaccard.query(q)
 
+    def queryNGram(self):
+        q = self.txt_keyword.toPlainText()
+        if len(q) == 0:
+            print("Keyword tidak boleh kosong")
+            return
+
+        if self.documents != None and len(self.documents) == 0:
+            print("Dokumen belum di index")
+            return
+
+        resultNGram = self.n_gram.query(q,2)
+
     # ================ BUTTON HANDLER =================
 
     def CheckKey(self):
@@ -205,7 +222,10 @@ class Ui(QtWidgets.QMainWindow):
 
         # TF IDF
         self.queryTfIdf()
+        # Jaccard
         self.queryJaccard()
+        # N Gram
+        self.queryNGram()
 
     def OpenFile(self):
         files = QFileDialog.getOpenFileNames(
@@ -227,6 +247,7 @@ class Ui(QtWidgets.QMainWindow):
         self.indexIncidentMatrix()
         self.indexTFIDF()
         self.indexjaccard()
+        self.indexN_gram()
 
     # ================ HELPER =================
 

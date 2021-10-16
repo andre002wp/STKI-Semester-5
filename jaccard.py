@@ -30,7 +30,6 @@ class Jaccard:
         jaccard_coef = []
         for i,doc in enumerate(self.result_docs['term_Similarity']):
             jaccard_coef.append(len(doc)/len(self.result_docs['union_docs'][i]))
-        print(jaccard_coef)
         return jaccard_coef
 
     def check_Similarity(self):
