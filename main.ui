@@ -236,7 +236,7 @@
            </sizepolicy>
           </property>
           <property name="currentIndex">
-           <number>6</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab">
            <property name="sizePolicy">
@@ -269,8 +269,16 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
               <property name="placeholderText">
                <string>(Silahkan Load Dokumen Terlebih Dahulu)</string>
@@ -281,9 +289,9 @@
           </widget>
           <widget class="QWidget" name="tab_2">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-             <horstretch>1</horstretch>
-             <verstretch>1</verstretch>
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="maximumSize">
@@ -295,12 +303,12 @@
            <attribute name="title">
             <string>TF/IDF</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetDefaultConstraint</enum>
-            </property>
-            <item>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
              <widget class="QTableWidget" name="tf_idf_table">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
                 <horstretch>0</horstretch>
@@ -318,6 +326,11 @@
                 <width>16777215</width>
                 <height>9999999</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>11</pointsize>
+               </font>
               </property>
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
@@ -407,6 +420,31 @@
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
+               </property>
+              </column>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QTableWidget" name="tf_idf_result_table_2">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>200</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <column>
+               <property name="text">
+                <string>Document Name</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Similarity</string>
                </property>
               </column>
              </widget>
@@ -507,14 +545,22 @@
            <attribute name="title">
             <string>Jaccard</string>
            </attribute>
-           <widget class="QPlainTextEdit" name="txt_jaccard_result">
+           <widget class="QTextEdit" name="txt_jaccard_result">
             <property name="geometry">
              <rect>
               <x>28</x>
               <y>26</y>
               <width>811</width>
-              <height>251</height>
+              <height>261</height>
              </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
            <widget class="QTableWidget" name="jaccard_result_table">
@@ -562,29 +608,83 @@
              </property>
             </column>
            </widget>
-           <widget class="QPlainTextEdit" name="txt_n_gram_result">
+           <widget class="QTextEdit" name="txt_ngram_result">
             <property name="geometry">
              <rect>
               <x>28</x>
-              <y>26</y>
+              <y>46</y>
               <width>811</width>
-              <height>251</height>
+              <height>241</height>
              </rect>
             </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+           <widget class="QWidget" name="horizontalLayoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>10</y>
+              <width>184</width>
+              <height>32</height>
+             </rect>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="maximumSize">
+                <size>
+                 <width>400</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Input N for Ngram :</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="txt_input_ngram">
+               <property name="maximumSize">
+                <size>
+                 <width>80</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="placeholderText">
+                <string>(number)</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </widget>
           <widget class="QWidget" name="tab_7">
            <attribute name="title">
             <string>Cosine Sim</string>
            </attribute>
-           <widget class="QPlainTextEdit" name="txt_cosine_result">
+           <widget class="QTextEdit" name="txt_cosine_result">
             <property name="geometry">
              <rect>
               <x>28</x>
               <y>26</y>
               <width>811</width>
-              <height>251</height>
+              <height>261</height>
              </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
            <widget class="QTableWidget" name="cosine_result_table">

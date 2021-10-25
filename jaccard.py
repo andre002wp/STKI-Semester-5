@@ -23,7 +23,7 @@ class Jaccard:
         self.result_docs['keyword'] = self.keywords
         self.result_docs['term_Similarity'] = self.check_Similarity()
         self.result_docs['union_docs'] = self.getUnion()
-        self.result_docs['jaccard_coef_result'] = self.jaccard_coeficient()
+        self.result_docs['jaccard_coef_result'] = self.jaccard_coeficient() #todo use .intersection() easier
 
         # print("keyword")
         # print(self.result_docs['keyword'])

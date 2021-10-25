@@ -25,12 +25,12 @@ class CosineSim:
         self.result_docs['document_term_matrix'] = self.generateTermMatrix()
         ## todo drimana ni ? disamain
         self.result_docs['cosine_distance'] = self.getCosineDistance(self.result_docs['document_term_matrix'][0],self.result_docs['document_term_matrix'][1])
-        # print("term_frequency")
-        # print(self.result_docs['term_frequency'])
-        # print("document_term_matrix")
-        # print(self.result_docs['document_term_matrix'])
-        # print("cosine_distance")
-        # print(self.result_docs['cosine_distance'])
+        print("term_frequency")
+        print(self.result_docs['term_frequency'])
+        print("document_term_matrix")
+        print(self.result_docs['document_term_matrix'])
+        print("cosine_distance")
+        print(self.result_docs['cosine_distance'])
         return self.result_docs
 
     def getTF(self):
@@ -75,10 +75,6 @@ class CosineSim:
                 len_matrix_b += key_matrix_b[term_idx]*key_matrix_b[term_idx]
 
             len_a_len_b = math.sqrt(len_matrix_a*len_matrix_b)
-            print("a_dot_b")
-            print(a_dot_b)
-            print("len_a_len_b")
-            print(len_a_len_b)
             if(a_dot_b != 0 and len_a_len_b != 0):
                 return a_dot_b/len_a_len_b
             else:

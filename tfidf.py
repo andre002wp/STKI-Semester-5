@@ -28,8 +28,7 @@ class TF_IDF:
         self.idf: 'list[float]' = self.getIDF(self.document_Frequency,self.d_over_df)
         self.idf_plus: 'list[float]' = self.getIDF_plus(self.idf)
         self.Weight: 'list[float]' = self.getWeight(self.term_Frequency,self.idf_plus)
-        self.totalWeight:'list[float]' = self.getTotal(self.Weight)
-        self.result:'list[str]' = self.getRelevance(self.totalWeight)
+        self.totalWeight:'list[float]' = self.getDocumentRelevance(self.Weight)
         return self.result_docs
         
 
@@ -98,7 +97,7 @@ class TF_IDF:
         self.result_docs['weight_keys'] = Weight_keys
         return Weight_keys
 
-    def getTotal(self,document_weight):
+    def getDocumentRelevance(self,document_weight):
         total = []
         for i,weight in enumerate(document_weight):
             if(i==0): # how do you declare 3int list then update the num
@@ -107,28 +106,15 @@ class TF_IDF:
             else:
                 for j,num_single_weight in enumerate(weight):
                     total[j]+=num_single_weight
-        self.result_docs['Toootalsss'] = total
-        return total
 
-    def getRelevance(self,total):
-        relevance = []
-        maxscore = max(total)
-        
-        # for i,document_weight in self.result_docs['Toootalsss']:# cannot unpack shit
-        if(maxscore>0):
-            for i in range(len(total)):
-                if(self.result_docs['Toootalsss'][i]==maxscore):
-                    relevance.append(self.documents[i].filename)
-        else:
-            relevance.append("None of the documents is relevant")
-        
+        _temp_result = {}
+        for i,subtotal in enumerate(total):
+            _temp_result[self.documents[i].filename] = subtotal
 
-        relevance_to_text = ""
-        for doc in relevance:
-            relevance_to_text +=  doc + " "
-
-        self.result_docs['most_relevance'] = relevance_to_text
-        return relevance
+        #sort
+        tfidf_coef = dict(sorted(_temp_result.items(), key=lambda item: item[1],reverse=True))
+        self.result_docs['tfidf_coef_result'] = tfidf_coef
+        return tfidf_coef
 
         
 
