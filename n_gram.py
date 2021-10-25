@@ -22,9 +22,32 @@ class N_Gram:
                 self.keywords.append(token.token)
         self.result_docs['keyword_on_gram'] = self.generate_ngrams(self.keywords, n)
         self.result_docs['document_on_gram'] = self.generate_document_ngrams(self.documents, n)
-        self.result_docs['ngram_sentence_result'] = self.getNGram()
+        self.result_docs['union_docs_gram'] = self.getUnionGram()
+        self.result_docs['ngram_similarity'] = self.getNGram()
         self.result_docs['ngram_coef_result'] = self.getNGramCoef()
+        # print("keyword_on_gram")
+        # print(self.result_docs['keyword_on_gram'])
+        # print("document_on_gram")
+        # print(self.result_docs['document_on_gram'])
+        # print("ngram_union_docs")
+        # print(self.result_docs['union_docs_gram'])
+        # print("ngram_similarity")
+        # print(self.result_docs['ngram_similarity'])
+        # print("ngram_coef_result")
+        # print(self.result_docs['ngram_coef_result'])
         return self.result_docs
+
+    def getUnionGram(self):
+        union_docs = []
+        # untuk setiap dokumen
+        for i in range(len(self.documents)):
+            temp_union = {}
+            for key in self.result_docs['keyword_on_gram']:
+                temp_union[key] = 1
+            for tokens in self.result_docs['document_on_gram'][i]:
+                temp_union[tokens] = 1
+            union_docs.append(temp_union)
+        return union_docs
 
     def generate_document_ngrams(self, documents: 'list[Document]', n:'int')-> 'list[Document]':
         documents_gram = []
@@ -39,16 +62,28 @@ class N_Gram:
         return [" ".join(ngram) for ngram in ngrams]
 
     def getNGram(self):
-        ngram_result = []
-        for document in self.result_docs['document_on_gram']:
-            result_temp=[]
-            for doc_sentence in document:
-                for key_sentence in self.result_docs['keyword_on_gram']:
-                    if(doc_sentence == key_sentence):
-                        result_temp.append(key_sentence)
-            ngram_result.append(result_temp)
-        print(ngram_result)
+        term_Similarity = []
+        
+        for document in self.result_docs['union_docs_gram']:
+            temp_TF_d_keyword = {}
+            for tokens in document:
+                for key in self.result_docs['keyword_on_gram']:
+                    if (key == tokens):
+                        temp_TF_d_keyword[key] = 1
+                            
+            term_Similarity.append(temp_TF_d_keyword)
+        return term_Similarity
+
+    def getNGramCoef(self):
+        _temp_result = {}
+
+        for i,doc in enumerate(self.result_docs['ngram_similarity']):
+            _temp_result[self.documents[i].filename] = len(doc)/len(self.result_docs['union_docs_gram'][i])
+
+        #sort
+        ngram_result = dict(sorted(_temp_result.items(), key=lambda item: item[1],reverse=True))
         return ngram_result
+
 
 
 

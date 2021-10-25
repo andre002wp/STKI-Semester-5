@@ -23,13 +23,25 @@ class Jaccard:
         self.result_docs['keyword'] = self.keywords
         self.result_docs['term_Similarity'] = self.check_Similarity()
         self.result_docs['union_docs'] = self.getUnion()
-        self.result_docs['jaccard_result'] = self.jaccard_coeficient()
+        self.result_docs['jaccard_coef_result'] = self.jaccard_coeficient()
+
+        # print("keyword")
+        # print(self.result_docs['keyword'])
+        # print("term_Similarity")
+        # print(self.result_docs['term_Similarity'])
+        # print("union_docs")
+        # print(self.result_docs['union_docs'])
+        # print("jaccard_coef_result")
+        # print(self.result_docs['jaccard_coef_result'])
         return self.result_docs
 
     def jaccard_coeficient(self):
-        jaccard_coef = []
+        _temp_result = {}
         for i,doc in enumerate(self.result_docs['term_Similarity']):
-            jaccard_coef.append(len(doc)/len(self.result_docs['union_docs'][i]))
+            _temp_result[self.documents[i].filename] = len(doc)/len(self.result_docs['union_docs'][i])
+
+        #sort
+        jaccard_coef = dict(sorted(_temp_result.items(), key=lambda item: item[1],reverse=True))
         return jaccard_coef
 
     def check_Similarity(self):

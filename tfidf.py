@@ -107,7 +107,6 @@ class TF_IDF:
             else:
                 for j,num_single_weight in enumerate(weight):
                     total[j]+=num_single_weight
-            print(total)
         self.result_docs['Toootalsss'] = total
         return total
 

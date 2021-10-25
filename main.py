@@ -9,6 +9,7 @@ from incident_matrix import BooleanModelIncidentMatrix
 from tfidf import TF_IDF
 from jaccard import Jaccard
 from n_gram import N_Gram
+from cosine_sim import CosineSim
 from querier import BooleanModelQuerier
 
 class Ui(QtWidgets.QMainWindow):
@@ -53,13 +54,27 @@ class Ui(QtWidgets.QMainWindow):
         self.result_tableIDF = self.findChild(
             QtWidgets.QTableWidget, 'tf_idf_table')
         self.result_tableIDF.setColumnWidth(0, 250)
-        self.result_tableIDF.setColumnWidth(0, 250)
         self.result_tableIDF.setColumnWidth(1, 400)
         self.result_tableIDF.setColumnWidth(2, 100)
         self.result_tableIDF.setColumnWidth(3, 100)
         self.result_tableIDF.setColumnWidth(4, 100)
         self.result_tableIDF.setColumnWidth(5, 100)
         self.result_tableIDF.setColumnWidth(6, 300)
+
+        self.result_tablejaccard = self.findChild(
+            QtWidgets.QTableWidget, 'jaccard_result_table')
+        self.result_tablejaccard.setColumnWidth(0, 400)
+        self.result_tablejaccard.setColumnWidth(1, 200)
+
+        self.result_table_ngram = self.findChild(
+            QtWidgets.QTableWidget, 'n_gram_result_table')
+        self.result_table_ngram.setColumnWidth(0, 400)
+        self.result_table_ngram.setColumnWidth(1, 200)
+
+        self.result_tablecosine = self.findChild(
+            QtWidgets.QTableWidget, 'cosine_result_table')
+        self.result_tablecosine.setColumnWidth(0, 400)
+        self.result_tablecosine.setColumnWidth(1, 200)
 
         self.tbl_inverted = self.findChild(
             QtWidgets.QTableWidget, 'inverted_index_table')
@@ -126,6 +141,10 @@ class Ui(QtWidgets.QMainWindow):
         self.n_gram = N_Gram()
         self.n_gram.index(self.documents)
 
+    def indexCosine(self):
+        self.cosineSim = CosineSim()
+        self.cosineSim.index(self.documents)
+
     # ================ QUERYING =================
 
     def queryBooleanModel(self):
@@ -183,7 +202,7 @@ class Ui(QtWidgets.QMainWindow):
             print("Keyword tidak boleh kosong")
             return
 
-        if self.documents != None and len(self.documents) == 0:
+        if self.documents == None or len(self.documents) == 0:
             print("Dokumen belum di index")
             return
 
@@ -196,11 +215,13 @@ class Ui(QtWidgets.QMainWindow):
             print("Keyword tidak boleh kosong")
             return
 
-        if self.documents != None and len(self.documents) == 0:
+        if self.documents == None or len(self.documents) == 0:
             print("Dokumen belum di index")
             return
 
         resultJaccard = self.jaccard.query(q)
+        self.__setJaccardTable(resultJaccard)
+        
 
     def queryNGram(self):
         q = self.txt_keyword.toPlainText()
@@ -208,11 +229,24 @@ class Ui(QtWidgets.QMainWindow):
             print("Keyword tidak boleh kosong")
             return
 
-        if self.documents != None and len(self.documents) == 0:
+        if self.documents == None or len(self.documents) == 0:
             print("Dokumen belum di index")
             return
 
-        resultNGram = self.n_gram.query(q,2)
+        resultNGram = self.n_gram.query(q,n = 2)
+        self.__setNGramTable(resultNGram)
+
+    def queryCosineSim(self):
+        q = self.txt_keyword.toPlainText()
+        if len(q) == 0:
+            print("Keyword tidak boleh kosong")
+            return
+
+        if self.documents == None or len(self.documents) == 0:
+            print("Dokumen belum di index")
+            return
+
+        resultCosine = self.cosineSim.query(q)
 
     # ================ BUTTON HANDLER =================
 
@@ -226,6 +260,8 @@ class Ui(QtWidgets.QMainWindow):
         self.queryJaccard()
         # N Gram
         self.queryNGram()
+        # CosineSim
+        self.queryCosineSim()
 
     def OpenFile(self):
         files = QFileDialog.getOpenFileNames(
@@ -248,6 +284,7 @@ class Ui(QtWidgets.QMainWindow):
         self.indexTFIDF()
         self.indexjaccard()
         self.indexN_gram()
+        self.indexCosine()
 
     # ================ HELPER =================
 
@@ -280,6 +317,38 @@ class Ui(QtWidgets.QMainWindow):
         self.result_tableIDF.setSpan(rows+1, 0, 1, 7)
         self.result_tableIDF.setItem(
             rows+1, 0, QtWidgets.QTableWidgetItem(str(f"Dokument paling relevan : {result2['most_relevance']}")))
+
+    def __setJaccardTable(self, result):
+        self.result_tablejaccard.setRowCount(len(result['jaccard_coef_result']))
+        rows = 0
+        for key,value in result['jaccard_coef_result'].items():
+            self.result_tablejaccard.setItem(
+                rows, 0, QtWidgets.QTableWidgetItem(str(key)))
+            self.result_tablejaccard.setItem(
+                rows, 1, QtWidgets.QTableWidgetItem(str(value)))
+            rows += 1
+
+    def __setNGramTable(self, result):
+        self.result_table_ngram.setRowCount(len(result['ngram_coef_result']))
+        rows = 0
+        for key,value in result['ngram_coef_result'].items():
+            self.result_table_ngram.setItem(
+                rows, 0, QtWidgets.QTableWidgetItem(str(key)))
+            self.result_table_ngram.setItem(
+                rows, 1, QtWidgets.QTableWidgetItem(str(value)))
+            rows += 1
+
+    def __setCosineTable(self, result):
+        self.result_tablecosine.setRowCount(len(result['ngram_coef_result']))
+        rows = 0
+        for key,value in result['ngram_coef_result'].items():
+            self.result_tablecosine.setItem(
+                rows, 0, QtWidgets.QTableWidgetItem(str(key)))
+            self.result_tablecosine.setItem(
+                rows, 1, QtWidgets.QTableWidgetItem(str(value)))
+            rows += 1
+
+    
 
 
 app = QtWidgets.QApplication(sys.argv)
