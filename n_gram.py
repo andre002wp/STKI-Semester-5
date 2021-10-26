@@ -64,7 +64,7 @@ class N_Gram:
     def getNGram(self):
         term_Similarity = []
         
-        for document in self.result_docs['union_docs_gram']:
+        for document in self.result_docs['document_on_gram']:
             temp_TF_d_keyword = {}
             for tokens in document:
                 for key in self.result_docs['keyword_on_gram']:
