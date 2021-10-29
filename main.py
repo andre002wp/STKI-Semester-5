@@ -450,15 +450,13 @@ class Ui(QtWidgets.QMainWindow):
     def __setCosineTable(self, result: 'dict[Document, float]'):
         cosine_result_text = ""
 
-        r = {k: v for k, v in sorted(result.items(), reverse=True, key=lambda item: item[1])}
-
-        for doc in r.keys():
-            cosine_result_text += f"filename = {doc.filename} --> "
-            # cosine_result_text += str(result['document_term_matrix'][0])+"\n"
-            # cosine_result_text += f"filename = {self.documents[1].filename}\n"
-            # cosine_result_text += str(result['document_term_matrix'][1])+"\n"
-            cosine_result_text += "cosine similarity = "+str("{:0.2f}".format(result[doc]))
-            cosine_result_text += "\n\n"
+        # for doc in r.keys():
+        #     cosine_result_text += f"filename = {doc.filename} --> "
+        #     # cosine_result_text += str(result['document_term_matrix'][0])+"\n"
+        #     # cosine_result_text += f"filename = {self.documents[1].filename}\n"
+        #     # cosine_result_text += str(result['document_term_matrix'][1])+"\n"
+        #     cosine_result_text += "cosine similarity = "+str("{:0.2f}".format(result[doc]))
+        #     cosine_result_text += "\n\n"
 
         self.txt_cosine_result.setText(cosine_result_text)
 
