@@ -26,17 +26,38 @@ class CosineSim:
         self.result_docs['term_frequency']  =self.getTF()
         self.result_docs['keyword_term_matrix'] = self.generateKeyMatrix()
         self.result_docs['document_term_matrix'] = self.generateTermMatrix()
-        ## todo drimana ni ? disamain
-        self.result_docs['cosine_coef'] = self.getCosineCoef()
-        print("term_frequency")
-        print(self.result_docs['term_frequency'])
-        print("keyword_term_matrix")
-        print(self.result_docs['keyword_term_matrix'])
-        print("document_term_matrix")
-        print(self.result_docs['document_term_matrix'])
-        print("cosine_coef")
-        print(self.result_docs['cosine_coef'])
+        self.result_docs['similarity'] = self.getCosineCoef()
+
+        self.result_docs['term_frequency_v2'] = self.getV2resultImplementation()
+        # print("term_frequency")
+        # print(self.result_docs['term_frequency'])
+        # print("keyword_term_matrix")
+        # print(self.result_docs['keyword_term_matrix'])
+        # print("document_term_matrix")
+        # print(self.result_docs['document_term_matrix'])
+        # print("similarity")
+        # print(self.result_docs['similarity'])
         return self.result_docs
+
+    def getV2resultImplementation(self):
+        _temp_docs = []
+        for doc in self.result_docs['document_term_matrix']:
+            _temp_doc = []
+
+            __keytf_to_dict = {}
+            __doctf_to_dict = {}
+
+            for index,key in enumerate(self.result_docs['term_frequency'].keys()):
+                __keytf_to_dict[key] = self.result_docs['keyword_term_matrix'][index]
+            _temp_doc.append(__keytf_to_dict)
+
+            for index,key in enumerate(self.result_docs['term_frequency'].keys()):
+                __doctf_to_dict[key] = doc[index]
+            _temp_doc.append(__doctf_to_dict)
+
+            _temp_docs.append(_temp_doc)
+
+        return _temp_docs
 
 
     def getTF(self):
@@ -63,8 +84,8 @@ class CosineSim:
                 if(key == word):
                     _tempcount +=1
             key_matrix.append(_tempcount)
-        print("key_matrix")
-        print(key_matrix)
+        # print("key_matrix")
+        # print(key_matrix)
         return key_matrix
 
     def generateTermMatrix(self):
@@ -77,11 +98,12 @@ class CosineSim:
         return document_matrix
 
     def getCosineCoef(self):
-        cosine_coef = []
-        for docs in self.result_docs['document_term_matrix']:
-            _tmpcosineVal = self.getCosineDistance(self.result_docs['keyword_term_matrix'],docs)
-            cosine_coef.append(_tmpcosineVal)
-        return cosine_coef
+        cosine_coef = {}
+        for index,docs in enumerate(self.result_docs['document_term_matrix']):
+            cosine_coef[self.documents[index].filename] = self.getCosineDistance(self.result_docs['keyword_term_matrix'],docs)
+
+        cosinesim_result = dict(sorted(cosine_coef.items(), key=lambda item: item[1],reverse=True))
+        return cosinesim_result
 
     def getCosineDistance(self,key_matrix_a,key_matrix_b):
         if(len(key_matrix_a)!= len(key_matrix_b)):

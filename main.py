@@ -9,7 +9,7 @@ from incident_matrix import BooleanModelIncidentMatrix
 from tfidf import TF_IDF
 from jaccard import Jaccard
 from n_gram import N_Gram
-from cosine_sim import CosineSim
+from cosine_sim_v2 import CosineSim
 from querier import BooleanModelQuerier
 
 class Ui(QtWidgets.QMainWindow):
@@ -447,18 +447,28 @@ class Ui(QtWidgets.QMainWindow):
                 rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
             rows += 1
     
-    def __setCosineTable(self, result: 'dict[Document, float]'):
+    def __setCosineTable(self, result: 'dict'):
         cosine_result_text = ""
 
-        # for doc in r.keys():
-        #     cosine_result_text += f"filename = {doc.filename} --> "
-        #     # cosine_result_text += str(result['document_term_matrix'][0])+"\n"
-        #     # cosine_result_text += f"filename = {self.documents[1].filename}\n"
-        #     # cosine_result_text += str(result['document_term_matrix'][1])+"\n"
-        #     cosine_result_text += "cosine similarity = "+str("{:0.2f}".format(result[doc]))
-        #     cosine_result_text += "\n\n"
+        for key,value in result['similarity'].items():
+            cosine_result_text += f"filename = {key} \n"
+            for term_docs in result['term_frequency_v2']:
+                for index in range(len(term_docs)):
+                    if(index==0):
+                        cosine_result_text += f"keyword tf :{term_docs[index]} \n"
+                    elif(index==1):
+                        cosine_result_text += f"{key} tf {term_docs[index]} \n\n"
 
         self.txt_cosine_result.setText(cosine_result_text)
+
+        self.result_tablecosine.setRowCount(len(result['similarity']))
+        rows = 0
+        for key,value in result['similarity'].items():
+            self.result_tablecosine.setItem(
+                rows, 0, QtWidgets.QTableWidgetItem(str(key)))
+            self.result_tablecosine.setItem(
+                rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
+            rows += 1
 
     # def __setCosineTable(self, result):
     #     cosine_result_text:str = ""
@@ -488,16 +498,16 @@ class Ui(QtWidgets.QMainWindow):
     #         #print result
     #         cosine_result_text += f"result : {len(docs.items())}/{len(result['union_docs'][idx])} = {result['jaccard_coef_result'][self.documents[idx].filename]}\n\n"
 
-    #     self.txt_cosine_result.setText(cosine_result_text)
+        # self.txt_cosine_result.setText(cosine_result_text)
 
-    #     self.result_tablecosine.setRowCount(len(result['ngram_coef_result']))
-    #     rows = 0
-    #     for key,value in result['ngram_coef_result'].items():
-    #         self.result_tablecosine.setItem(
-    #             rows, 0, QtWidgets.QTableWidgetItem(str(key)))
-    #         self.result_tablecosine.setItem(
-    #             rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
-    #         rows += 1
+        # self.result_tablecosine.setRowCount(len(result['ngram_coef_result']))
+        # rows = 0
+        # for key,value in result['ngram_coef_result'].items():
+        #     self.result_tablecosine.setItem(
+        #         rows, 0, QtWidgets.QTableWidgetItem(str(key)))
+        #     self.result_tablecosine.setItem(
+        #         rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
+        #     rows += 1
 
     
 
