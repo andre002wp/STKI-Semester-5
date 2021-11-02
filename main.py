@@ -12,6 +12,7 @@ from n_gram import N_Gram
 from cosine_sim_v2 import CosineSim
 from querier import BooleanModelQuerier
 
+
 class Ui(QtWidgets.QMainWindow):
     table_result: 'QTableWidget'
     tbl_inverted: 'QTableWidget'
@@ -51,13 +52,16 @@ class Ui(QtWidgets.QMainWindow):
         self.lbl_inverted_result = self.findChild(
             QtWidgets.QLabel, 'lbl_inverted_result')
 
+        self.tbl_preprocess = self.findChild(
+            QtWidgets.QTableWidget, 'tbl_preprocess')
+
         # input ngram
         self.txt_input_ngram = self.findChild(
             QtWidgets.QLineEdit, 'txt_input_ngram')
 
-        ######## set table width
+        # set table width
 
-        #tfidf
+        # tfidf
         self.result_tableIDF = self.findChild(
             QtWidgets.QTableWidget, 'tf_idf_table')
         self.result_tableIDF.setColumnWidth(0, 250)
@@ -73,16 +77,15 @@ class Ui(QtWidgets.QMainWindow):
         self.result_tableIDF2.setColumnWidth(0, 200)
         self.result_tableIDF2.setColumnWidth(1, 400)
 
-        #jaccard_table
+        # jaccard_table
         self.result_tablejaccard = self.findChild(
             QtWidgets.QTableWidget, 'jaccard_result_table')
         self.result_tablejaccard.setColumnWidth(0, 400)
         self.result_tablejaccard.setColumnWidth(1, 200)
         self.txt_jaccard_result = self.findChild(
             QtWidgets.QTextEdit, 'txt_jaccard_result')
-        
 
-        #ngram_table
+        # ngram_table
         self.result_table_ngram = self.findChild(
             QtWidgets.QTableWidget, 'n_gram_result_table')
         self.result_table_ngram.setColumnWidth(0, 400)
@@ -90,7 +93,7 @@ class Ui(QtWidgets.QMainWindow):
         self.txt_ngram_result = self.findChild(
             QtWidgets.QTextEdit, 'txt_ngram_result')
 
-        #cosine_table
+        # cosine_table
         self.result_tablecosine = self.findChild(
             QtWidgets.QTableWidget, 'cosine_result_table')
         self.result_tablecosine.setColumnWidth(0, 400)
@@ -209,14 +212,15 @@ class Ui(QtWidgets.QMainWindow):
             resultIncident = self.incident_strategy.query(q)
             self.lbl_incident_result.setText(prettyStrRes(resultIncident))
         except:
-            self.lbl_incident_result.setText("Incident strategy gagal mengeval queri")
+            self.lbl_incident_result.setText(
+                "Incident strategy gagal mengeval queri")
 
         try:
             resultInverted = self.incident_strategy.query(q)
             self.lbl_inverted_result.setText(prettyStrRes(resultInverted))
         except:
-            self.lbl_inverted_result.setText("Inverted strategy gagal mengeval queri")
-
+            self.lbl_inverted_result.setText(
+                "Inverted strategy gagal mengeval queri")
 
     def queryTfIdf(self):
         q = self.txt_keyword.toPlainText()
@@ -243,7 +247,6 @@ class Ui(QtWidgets.QMainWindow):
 
         resultJaccard = self.jaccard.query(q)
         self.__setJaccardTable(resultJaccard)
-        
 
     def queryNGram(self):
         q = self.txt_keyword.toPlainText()
@@ -255,22 +258,23 @@ class Ui(QtWidgets.QMainWindow):
             print("Dokumen belum di index")
             return
 
-        
         if(self.txt_input_ngram.text() != ""):
             num_n = ""
             for word in self.txt_input_ngram.text():
                 if word.isdigit():
                     num_n += word
             print(num_n)
-            
-            if(len(num_n)>0):
+
+            if(len(num_n) > 0):
                 num_n = int(num_n)
-                resultNGram = self.n_gram.query(q,n = num_n)
+                resultNGram = self.n_gram.query(q, n=num_n)
                 self.__setNGramTable(resultNGram)
             else:
-                self.txt_ngram_result.setText(str("nilai n harus berupa integer"))
+                self.txt_ngram_result.setText(
+                    str("nilai n harus berupa integer"))
         else:
-            self.txt_ngram_result.setText(str("silahkan input nilai N terlebih dahulu"))
+            self.txt_ngram_result.setText(
+                str("silahkan input nilai N terlebih dahulu"))
 
     def queryCosineSim(self):
         q = self.txt_keyword.toPlainText()
@@ -307,14 +311,37 @@ class Ui(QtWidgets.QMainWindow):
         self.documents = []
 
         # Preprocessing
-        filelist = ""
-        for file in files[0]:
+        # filelist = ""
+        self.tbl_preprocess.setRowCount(len(files[0]))
+        for i, file in enumerate(files[0]):
             _d = Document.from_file(file)
             self.documents.append(_d)
-            _d_as_str = str(_d)
+            # _d_as_str = str(_d)
 
-            filelist += f"{_d.filename} {_d_as_str}\n\n=======================\n\n"
-        self.widget_docs_list.setText(str(filelist))
+            # filelist += f"{_d.filename} {_d_as_str}\n\n=======================\n\n"
+            self.tbl_preprocess.setItem(
+                i, 0, QtWidgets.QTableWidgetItem(_d.filename))
+            self.tbl_preprocess.setItem(
+                i, 1, QtWidgets.QTableWidgetItem(_d.raw))
+            self.tbl_preprocess.setItem(
+                i, 2, QtWidgets.QTableWidgetItem(_d.folded))
+            self.tbl_preprocess.setItem(
+                i, 3, QtWidgets.QTableWidgetItem(_d.no_number))
+            self.tbl_preprocess.setItem(
+                i, 4, QtWidgets.QTableWidgetItem(_d.no_symbol))
+            self.tbl_preprocess.setItem(
+                i, 5, QtWidgets.QTableWidgetItem(_d.trimmed))
+            self.tbl_preprocess.setItem(
+                i, 6, QtWidgets.QTableWidgetItem(str(_d.tokenized)))
+            self.tbl_preprocess.setItem(
+                i, 7, QtWidgets.QTableWidgetItem(str(_d.filtered)))
+            self.tbl_preprocess.setItem(
+                i, 8, QtWidgets.QTableWidgetItem(_d.stemmed_str))
+            self.tbl_preprocess.setItem(
+                i, 9, QtWidgets.QTableWidgetItem(_d.filepath))
+            self.tbl_preprocess.resizeColumnsToContents()
+
+        # self.widget_docs_list.setText(str(filelist))
 
         self.indexInvertedIndex()
         self.indexIncidentMatrix()
@@ -326,7 +353,7 @@ class Ui(QtWidgets.QMainWindow):
     # ================ HELPER =================
 
     def __setIDFTable(self, result_idf):
-        #tabel Pertama
+        # tabel Pertama
         self.result_tableIDF.setRowCount(len(result_idf['keyword']))
         rows = 0
         for i, key in enumerate(result_idf['keyword']):
@@ -355,53 +382,49 @@ class Ui(QtWidgets.QMainWindow):
                 rows, 6, QtWidgets.QTableWidgetItem(str(weight_print)))
             rows += 1
 
-
-            
         self.result_tableIDF2.setRowCount(len(result_idf['tfidf_coef_result']))
         rows = 0
-        for key,value in result_idf['tfidf_coef_result'].items():
+        for key, value in result_idf['tfidf_coef_result'].items():
             self.result_tableIDF2.setItem(
                 rows, 0, QtWidgets.QTableWidgetItem(str(key)))
             self.result_tableIDF2.setItem(
                 rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
             rows += 1
 
-        
-
     def __setJaccardTable(self, result):
-        jaccard_result_text:str = ""
-        for idx,docs in enumerate(result['term_Similarity']):
-            #print nama file
+        jaccard_result_text: str = ""
+        for idx, docs in enumerate(result['term_Similarity']):
+            # print nama file
             jaccard_result_text += f"file : {self.documents[idx].filename}\n"
-            #print A intersect B
+            # print A intersect B
             jaccard_result_text += "A \u2229 B :"
             jaccard_result_text += "{ "
-            for item,sub in docs.items():
+            for item, sub in docs.items():
                 if(list(docs)[-1] == item):
                     jaccard_result_text += str(item)+" "
                 else:
                     jaccard_result_text += str(item)+", "
             jaccard_result_text += "}\n"
 
-            #print A U B
+            # print A U B
             jaccard_result_text += "A U B :"
             jaccard_result_text += "{ "
-            for item,sub in result['union_docs'][idx].items():
+            for item, sub in result['union_docs'][idx].items():
                 if(list(result['union_docs'][idx])[-1] == item):
                     jaccard_result_text += str(item)+" "
                 else:
                     jaccard_result_text += str(item)+", "
             jaccard_result_text += "}\n"
 
-            #print result
+            # print result
             jaccard_result_text += f"result : {len(docs.items())}/{len(result['union_docs'][idx])} = {result['jaccard_coef_result'][self.documents[idx].filename]}\n\n"
-
 
         self.txt_jaccard_result.setText(jaccard_result_text)
 
-        self.result_tablejaccard.setRowCount(len(result['jaccard_coef_result']))
+        self.result_tablejaccard.setRowCount(
+            len(result['jaccard_coef_result']))
         rows = 0
-        for key,value in result['jaccard_coef_result'].items():
+        for key, value in result['jaccard_coef_result'].items():
             self.result_tablejaccard.setItem(
                 rows, 0, QtWidgets.QTableWidgetItem(str(key)))
             self.result_tablejaccard.setItem(
@@ -409,61 +432,61 @@ class Ui(QtWidgets.QMainWindow):
             rows += 1
 
     def __setNGramTable(self, result):
-        ngram_result_text:str = ""
-        for idx,docs in enumerate(result['ngram_similarity']):
-            #print nama file
+        ngram_result_text: str = ""
+        for idx, docs in enumerate(result['ngram_similarity']):
+            # print nama file
             ngram_result_text += f"file : {self.documents[idx].filename}\n"
-            #print A intersect B
+            # print A intersect B
             ngram_result_text += "A \u2229 B :"
             ngram_result_text += "{ "
-            for item,sub in docs.items():
+            for item, sub in docs.items():
                 if(list(docs)[-1] == item):
                     ngram_result_text += str(item)+" "
                 else:
                     ngram_result_text += str(item)+", "
             ngram_result_text += "}\n"
 
-            #print A U B
+            # print A U B
             ngram_result_text += "A U B :"
             ngram_result_text += "{ "
-            for item,sub in result['union_docs_gram'][idx].items():
+            for item, sub in result['union_docs_gram'][idx].items():
                 if(list(result['union_docs_gram'][idx])[-1] == item):
                     ngram_result_text += str(item)+" "
                 else:
                     ngram_result_text += str(item)+", "
             ngram_result_text += "}\n"
 
-            #print result
+            # print result
             ngram_result_text += f"result : {len(docs.items())}/{len(result['union_docs_gram'][idx])} = {result['ngram_coef_result'][self.documents[idx].filename]}\n\n"
 
         self.txt_ngram_result.setText(ngram_result_text)
 
         self.result_table_ngram.setRowCount(len(result['ngram_coef_result']))
         rows = 0
-        for key,value in result['ngram_coef_result'].items():
+        for key, value in result['ngram_coef_result'].items():
             self.result_table_ngram.setItem(
                 rows, 0, QtWidgets.QTableWidgetItem(str(key)))
             self.result_table_ngram.setItem(
                 rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
             rows += 1
-    
+
     def __setCosineTable(self, result: 'dict'):
         cosine_result_text = ""
 
-        for key,value in result['similarity'].items():
+        for key, value in result['similarity'].items():
             cosine_result_text += f"filename = {key} \n"
             for term_docs in result['term_frequency_v2']:
                 for index in range(len(term_docs)):
-                    if(index==0):
+                    if(index == 0):
                         cosine_result_text += f"keyword tf :{term_docs[index]} \n"
-                    elif(index==1):
+                    elif(index == 1):
                         cosine_result_text += f"{key} tf {term_docs[index]} \n\n"
 
         self.txt_cosine_result.setText(cosine_result_text)
 
         self.result_tablecosine.setRowCount(len(result['similarity']))
         rows = 0
-        for key,value in result['similarity'].items():
+        for key, value in result['similarity'].items():
             self.result_tablecosine.setItem(
                 rows, 0, QtWidgets.QTableWidgetItem(str(key)))
             self.result_tablecosine.setItem(
@@ -508,8 +531,6 @@ class Ui(QtWidgets.QMainWindow):
         #     self.result_tablecosine.setItem(
         #         rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
         #     rows += 1
-
-    
 
 
 app = QtWidgets.QApplication(sys.argv)

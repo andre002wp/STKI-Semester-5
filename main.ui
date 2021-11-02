@@ -250,39 +250,57 @@
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QTextEdit" name="txt_document">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
-                <horstretch>0</horstretch>
-                <verstretch>1</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-               </font>
-              </property>
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-              <property name="placeholderText">
-               <string>(Silahkan Load Dokumen Terlebih Dahulu)</string>
-              </property>
+             <widget class="QTableWidget" name="tbl_preprocess">
+              <column>
+               <property name="text">
+                <string>Filename</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Raw</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Folded</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>No Number</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>No Symbol</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Trimmed</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Tokenized</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Filtered</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Stemmed</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Filepath</string>
+               </property>
+              </column>
              </widget>
             </item>
            </layout>
@@ -722,7 +740,7 @@
      <x>0</x>
      <y>0</y>
      <width>1190</width>
-     <height>26</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
