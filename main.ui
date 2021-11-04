@@ -154,13 +154,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="lbl_boolean_query">
-          <property name="text">
-           <string>(Buat query)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer_3">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -181,6 +174,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="lbl_incident_query">
+          <property name="text">
+           <string>(Buat query)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="lbl_incident_result">
           <property name="text">
            <string>-</string>
@@ -194,6 +194,13 @@
          <widget class="QLabel" name="label_4">
           <property name="text">
            <string>Hasil Inverted Index</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_inverted_query">
+          <property name="text">
+           <string>(Buat query)</string>
           </property>
          </widget>
         </item>

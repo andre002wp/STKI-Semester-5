@@ -10,7 +10,6 @@ from tfidf import TF_IDF
 from jaccard import Jaccard
 from n_gram import N_Gram
 from cosine_sim_v2 import CosineSim
-from querier import BooleanModelQuerier
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -20,7 +19,8 @@ class Ui(QtWidgets.QMainWindow):
 
     widget_docs_list: 'QtCore.QObject'
 
-    lbl_boolean_query: 'QLabel'
+    lbl_incident_query: 'QLabel'
+    lbl_inverted_query: 'QLabel'
     lbl_incident_result: 'QLabel'
     lbl_inverted_result: 'QLabel'
 
@@ -45,8 +45,11 @@ class Ui(QtWidgets.QMainWindow):
         self.widget_docs_list = self.findChild(
             QtWidgets.QTextEdit, 'txt_document')
 
-        self.lbl_boolean_query = self.findChild(
-            QtWidgets.QLabel, 'lbl_boolean_query')
+        self.lbl_incident_query = self.findChild(
+            QtWidgets.QLabel, 'lbl_incident_query')
+        self.lbl_inverted_query = self.findChild(
+            QtWidgets.QLabel, 'lbl_inverted_query')
+
         self.lbl_incident_result = self.findChild(
             QtWidgets.QLabel, 'lbl_incident_result')
         self.lbl_inverted_result = self.findChild(
@@ -188,13 +191,13 @@ class Ui(QtWidgets.QMainWindow):
             return
 
         # Ini gak efisien, tapi untuk visualisasi query gaapalah
-        quer = BooleanModelQuerier(self.documents)
-        try:
-            binquery = quer.make_boolean_query(q).replace("0b", "")
-        except:
-            binquery = "Gagal memparse queri"
-            return
-        self.lbl_boolean_query.setText(binquery)
+        # quer = BooleanModelQuerier(self.documents)
+        # try:
+        #     binquery = quer.make_boolean_query(q).replace("0b", "")
+        # except:
+        #     binquery = "Gagal memparse queri"
+        #     return
+        # self.lbl_boolean_query.setText(binquery)
         # End hack untuk visualisasi
 
         if len(self.documents) == 0:
@@ -210,7 +213,8 @@ class Ui(QtWidgets.QMainWindow):
             return incident_result
 
         try:
-            resultIncident = self.incident_strategy.query(q)
+            query, resultIncident = self.incident_strategy.query(q)
+            self.lbl_incident_query.setText(query)
             self.lbl_incident_result.setText(prettyStrRes(resultIncident))
         except Exception as e:
             print(e)
@@ -218,7 +222,8 @@ class Ui(QtWidgets.QMainWindow):
                 "Incident strategy gagal mengeval queri")
 
         try:
-            resultInverted = self.inverted_strategy.query(q)
+            query, resultInverted = self.inverted_strategy.query(q)
+            self.lbl_inverted_query.setText(query)
             self.lbl_inverted_result.setText(prettyStrRes(resultInverted))
         except Exception as e:
             print(e)

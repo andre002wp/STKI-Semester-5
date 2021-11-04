@@ -1,7 +1,7 @@
 from os import path
+from typing import Tuple
 from apalah_parser import ApalahParser
 from document import Document
-from querier import BooleanModelQuerier
 
 
 # MAKE TOKENIZED sebelum di stem dkk
@@ -84,7 +84,7 @@ class BooleanModelInvertedIndex:  # Inverted Index
 
         return a
 
-    def query(self, q: 'str') -> 'list[Document]':
+    def query(self, q: 'str') -> 'Tuple[str, list[Document]]':
         # Penjelasan lebih lanjut di incident matrix
         if self.inverted_index_table == None:
             raise Exception("Lakukan indexing sebelum mengquery")
@@ -120,5 +120,5 @@ class BooleanModelInvertedIndex:  # Inverted Index
                 result_docs.append(doc)
             res = res >> 1
 
-        return result_docs
+        return to_eval, result_docs
         # endregion

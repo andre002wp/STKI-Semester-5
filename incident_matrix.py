@@ -1,8 +1,8 @@
 from os import path
+from typing import Tuple
 from apalah_parser import ApalahParser
 from document import Document
 import re
-from querier import BooleanModelQuerier
 
 # MAKE TOKENIZED sebelum di stem dkk
 
@@ -53,7 +53,7 @@ class BooleanModelIncidentMatrix:  # Incident Matrix
 
             self.incident_matrix[word] = binary_of_term
 
-    def query(self, q: 'str') -> 'list[Document]':
+    def query(self, q: 'str') -> 'Tuple[str, list[Document]]':
         if self.incident_matrix == None:
             raise Exception("Lakukan indexing sebelum mengquery")
 
@@ -95,7 +95,7 @@ class BooleanModelIncidentMatrix:  # Incident Matrix
                 result_docs.append(doc)
             res = res >> 1
 
-        return result_docs
+        return to_eval, result_docs
         # endregion
 
 
