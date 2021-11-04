@@ -1,4 +1,5 @@
 from os import path
+from apalah_parser import ApalahParser
 from document import Document
 from querier import BooleanModelQuerier
 
@@ -52,7 +53,6 @@ class BooleanModelInvertedIndex:  # Inverted Index
             s += l.pretty() + " "
 
         return s.strip()
-    
 
     def index(self, _documents: 'list[Document]'):
         self.documents = _documents
@@ -74,6 +74,51 @@ class BooleanModelInvertedIndex:  # Inverted Index
                     docindexed.append(iirow)
             self.inverted_index_table[word] = docindexed
 
+    # Helper function
+    def __keyword_to_binary(self, keyword: 'str') -> 'int':
+        a = 0
+
+        for it in self.inverted_index_table[keyword]:
+            _document_bit = 1 << it.id_file
+            a = a | _document_bit
+
+        return a
+
     def query(self, q: 'str') -> 'list[Document]':
-        quer = BooleanModelQuerier(self.documents)
-        return quer.query(q)
+        # Penjelasan lebih lanjut di incident matrix
+        if self.inverted_index_table == None:
+            raise Exception("Lakukan indexing sebelum mengquery")
+
+        # region Parsing Query
+        parsed = ApalahParser.parse(q)
+        for i, token in enumerate(parsed.token):
+            if not token.is_symbol:
+                b = self.__keyword_to_binary(token.token)
+                # print(token, bin(b))
+                parsed.token[i].set_binary(b)
+
+        to_eval = ""
+        for it in parsed.token:
+            if it.is_symbol:
+                to_eval += it.token
+            else:
+                to_eval += f" {bin(it.binary)} "
+
+        if to_eval == "":
+            print("Invalid query")
+            return
+        # endregion
+
+        # region Actual Querying
+        res: 'int' = eval(to_eval)
+        print("Inverted Index:: ", to_eval, "==>", res)
+
+        result_docs: 'list[Document]' = []
+        for i, doc in enumerate(self.documents):
+            keyword_in_doc: 'int' = res & 1
+            if keyword_in_doc == 1:
+                result_docs.append(doc)
+            res = res >> 1
+
+        return result_docs
+        # endregion

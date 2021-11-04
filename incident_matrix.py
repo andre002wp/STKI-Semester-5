@@ -16,8 +16,24 @@ class BooleanModelIncidentMatrix:  # Incident Matrix
     #         doc0   doc1    doc2
     # kata1    1        0       1
     # kata2    0        0       1
-    incident_matrix: 'dict[str, list[int]]'  # Format diatas jadinya adalah
-    # {"kata1": [0, 2], "kata2": [2]} index memakai index di `self.documents`
+    incident_matrix: 'dict[str, int]'  # Format diatas jadinya adalah
+    # {'antony': 44, 'worser': 51, 'abc': 2, 'caesar': 62, 'brutus': 56, 'mercy': 55, 'calpurnia': 8, 'cleopatra': 32}
+    # Perhatikan bahwa 44 dalam binary adalah 0b101100
+
+    def matrix_for_showing(self) -> 'dict[str, list[int]]':
+        if self.incident_matrix == None:
+            raise Exception("Belum di index")
+
+        # Fungsi ini hanya untuk membantu visualisasi incident matrix di UI
+        res = {}
+        for word in self.uniq_words:
+            foundIndex: list[int] = []
+            for doci, doc in enumerate(self.documents):
+                if word in doc.tokenized:  # MASIH PAKE TOKENIZED SEBELUM STEM DKK
+                    foundIndex.append(doci)
+
+            res[word] = foundIndex
+        return res
 
     def index(self, _documents: 'list[Document]'):
         self.documents = _documents
@@ -29,34 +45,26 @@ class BooleanModelIncidentMatrix:  # Incident Matrix
                 self.uniq_words.add(word)
 
         for word in self.uniq_words:
-            foundIndex: list[int] = []
-            for doci, doc in enumerate(self.documents):
+            binary_of_term: int = 0
+            for doc in self.documents:
+                binary_of_term = binary_of_term << 1
                 if word in doc.tokenized:  # MASIH PAKE TOKENIZED SEBELUM STEM DKK
-                    foundIndex.append(doci)
+                    binary_of_term = binary_of_term | 1
 
-            self.incident_matrix[word] = foundIndex
-
-    # Helper function
-    def __keyword_to_binary(self, keyword: 'str') -> 'int':
-        # Urutan dari bit terkiri (Most important) ke kanan (Least important)
-        # Most important adalah dokumen 0
-        # Least important adalah dokumen terakhir
-        a = 0
-        for bit in reversed(self.incident_matrix[keyword]):
-            a = a << 1
-            a = a | bit
-
-        return a
+            self.incident_matrix[word] = binary_of_term
 
     def query(self, q: 'str') -> 'list[Document]':
         if self.incident_matrix == None:
             raise Exception("Lakukan indexing sebelum mengquery")
 
+        print(self.incident_matrix)
+
         # region Parsing Query
         parsed = ApalahParser.parse(q)
         for i, token in enumerate(parsed.token):
             if not token.is_symbol:
-                b = self.__keyword_to_binary(token.token)
+                # b = self.__keyword_to_binary(token.token)
+                b = self.incident_matrix[token.token]
                 # print(token, bin(b))
                 parsed.token[i].set_binary(b)
 
@@ -98,3 +106,11 @@ class BooleanModelIncidentMatrix:  # Incident Matrix
 
 # brutus & caesar & ~calpurnia
 # brutus | caesar & ~calpurnia
+
+# !!! NOTE!!!
+# calpurnia menghasilkan binary 1000
+# tapi karena total ada dokumen seharusnya 001000
+# bukan masalah, menghemat bit, TAPI
+# operasi NOT (~) untuk 1000 dan 001000 itu berbeda
+# untuk 1000 hasilnya adalah 0111
+# untuk 001000 hasilnya adalah 110111 BEDA
