@@ -142,12 +142,13 @@ class Ui(QtWidgets.QMainWindow):
             self.tbl_incident.setHorizontalHeaderItem(
                 i + 1, QTableWidgetItem(it.filename))
 
+        matrix_visual = self.incident_strategy.matrix_for_showing()
         for i, word in enumerate(self.incident_strategy.uniq_words):
             self.tbl_incident.setItem(
                 i, 0, QtWidgets.QTableWidgetItem(word))
 
             for j, doc in enumerate(self.incident_strategy.documents):
-                if j in self.incident_strategy.incident_matrix[word]:
+                if j in matrix_visual[word]:
                     self.tbl_incident.setItem(
                         i, j + 1, QtWidgets.QTableWidgetItem("1"))
                 else:
@@ -217,7 +218,7 @@ class Ui(QtWidgets.QMainWindow):
                 "Incident strategy gagal mengeval queri")
 
         try:
-            resultInverted = self.incident_strategy.query(q)
+            resultInverted = self.inverted_strategy.query(q)
             self.lbl_inverted_result.setText(prettyStrRes(resultInverted))
         except Exception as e:
             print(e)
