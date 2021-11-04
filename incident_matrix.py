@@ -74,7 +74,7 @@ class BooleanModelIncidentMatrix:  # Incident Matrix
 
         # region Actual Querying
         res: 'int' = eval(to_eval)  # DANGER, tapi biar cepet yasudahlah
-        print(to_eval, "==>", res)
+        print("Incident Matrix::", to_eval, "==>", res)
 
         result_docs: 'list[Document]' = []
         # Kenapa reversed?
