@@ -211,14 +211,16 @@ class Ui(QtWidgets.QMainWindow):
         try:
             resultIncident = self.incident_strategy.query(q)
             self.lbl_incident_result.setText(prettyStrRes(resultIncident))
-        except:
+        except Exception as e:
+            print(e)
             self.lbl_incident_result.setText(
                 "Incident strategy gagal mengeval queri")
 
         try:
             resultInverted = self.incident_strategy.query(q)
             self.lbl_inverted_result.setText(prettyStrRes(resultInverted))
-        except:
+        except Exception as e:
+            print(e)
             self.lbl_inverted_result.setText(
                 "Inverted strategy gagal mengeval queri")
 
