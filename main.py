@@ -179,15 +179,16 @@ class Ui(QtWidgets.QMainWindow):
     def queryBooleanModel(self):
         q = self.txt_query.toPlainText()
         if len(q) == 0:
-            self.lbl_boolean_query.setText("Query tidak boleh kosong")
+            self.lbl_incident_query.setText("Query tidak boleh kosong")
+            self.lbl_inverted_query.setText("Query tidak boleh kosong")
             return
 
         if self.incident_strategy == None:
-            self.lbl_boolean_query.setText("Incident belum mengindex")
+            self.lbl_incident_query.setText("Incident belum mengindex")
             return
 
         if self.inverted_strategy == None:
-            self.lbl_boolean_query.setText("Inverted belum mengindex")
+            self.lbl_inverted_query.setText("Inverted belum mengindex")
             return
 
         # Ini gak efisien, tapi untuk visualisasi query gaapalah
