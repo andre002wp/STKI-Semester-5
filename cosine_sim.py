@@ -37,6 +37,8 @@ class CosineSim:
         # print(self.result_docs['document_term_matrix'])
         # print("similarity")
         # print(self.result_docs['similarity'])
+        # print("term_frequency_v2")
+        # print(self.result_docs['term_frequency_v2'])
         return self.result_docs
 
     def getV2resultImplementation(self):

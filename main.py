@@ -9,7 +9,8 @@ from incident_matrix import BooleanModelIncidentMatrix
 from tfidf import TF_IDF
 from jaccard import Jaccard
 from n_gram import N_Gram
-from cosine_sim_v2 import CosineSim
+from cosine_sim import CosineSim
+from DROPT import DROPT
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -104,6 +105,14 @@ class Ui(QtWidgets.QMainWindow):
         self.txt_cosine_result = self.findChild(
             QtWidgets.QTextEdit, 'txt_cosine_result')
 
+        # dropt_table
+        self.result_tabledropt = self.findChild(
+            QtWidgets.QTableWidget, 'dropt_result_table')
+        self.result_tabledropt.setColumnWidth(0, 400)
+        self.result_tabledropt.setColumnWidth(1, 200)
+        self.txt_dropt_result = self.findChild(
+            QtWidgets.QTextEdit, 'txt_dropt_result')
+
         self.tbl_inverted = self.findChild(
             QtWidgets.QTableWidget, 'inverted_index_table')
         self.tbl_incident = self.findChild(
@@ -173,6 +182,12 @@ class Ui(QtWidgets.QMainWindow):
     def indexCosine(self):
         self.cosineSim = CosineSim()
         self.cosineSim.index(self.documents)
+    
+    def indexDropt(self):
+        self.dropt = DROPT()
+        self.dropt.index(self.documents)
+
+        
 
     # ================ QUERYING =================
 
@@ -259,9 +274,9 @@ class Ui(QtWidgets.QMainWindow):
 
     def queryNGram(self):
         q = self.txt_keyword.toPlainText()
-        if len(q) == 0:
-            print("Keyword tidak boleh kosong")
-            return
+        # if len(q) == 0:
+        #     print("Keyword tidak boleh kosong")
+        #     return
 
         if self.documents == None or len(self.documents) == 0:
             print("Dokumen belum di index")
@@ -272,18 +287,21 @@ class Ui(QtWidgets.QMainWindow):
             for word in self.txt_input_ngram.text():
                 if word.isdigit():
                     num_n += word
-            print(num_n)
+            # print(num_n)
+        else:
+            num_n = "2"
+            self.txt_input_ngram.setText(str("Default : 2"))
 
-            if(len(num_n) > 0):
-                num_n = int(num_n)
-                resultNGram = self.n_gram.query(q, n=num_n)
-                self.__setNGramTable(resultNGram)
-            else:
-                self.txt_ngram_result.setText(
-                    str("nilai n harus berupa integer"))
+        if(len(num_n) > 0):
+            num_n = int(num_n)
+            resultNGram = self.n_gram.query(q, n=num_n)
+            self.__setNGramTable(resultNGram)
         else:
             self.txt_ngram_result.setText(
-                str("silahkan input nilai N terlebih dahulu"))
+                str("nilai n harus berupa integer"))
+        # else:
+        #     self.txt_ngram_result.setText(
+        #         str("silahkan input nilai N terlebih dahulu"))
 
     def queryCosineSim(self):
         q = self.txt_keyword.toPlainText()
@@ -297,6 +315,19 @@ class Ui(QtWidgets.QMainWindow):
 
         resultCosine = self.cosineSim.query(q)
         self.__setCosineTable(resultCosine)
+
+    def queryDropt(self):
+        q = self.txt_keyword.toPlainText()
+        if len(q) == 0:
+            print("Keyword tidak boleh kosong")
+            return
+
+        if self.documents == None or len(self.documents) == 0:
+            print("Dokumen belum di index")
+            return
+
+        resultDropt = self.dropt.query(q)
+        # self.__setCosineTable(resultDropt)
 
     # ================ BUTTON HANDLER =================
 
@@ -312,6 +343,8 @@ class Ui(QtWidgets.QMainWindow):
         self.queryNGram()
         # CosineSim
         self.queryCosineSim()
+        # DROPT
+        self.queryDropt()
 
     def OpenFile(self):
         files = QFileDialog.getOpenFileNames(
@@ -358,6 +391,7 @@ class Ui(QtWidgets.QMainWindow):
         self.indexjaccard()
         self.indexN_gram()
         self.indexCosine()
+        self.indexDropt()
 
     # ================ HELPER =================
 
@@ -481,15 +515,16 @@ class Ui(QtWidgets.QMainWindow):
 
     def __setCosineTable(self, result: 'dict'):
         cosine_result_text = ""
-
-        for key, value in result['similarity'].items():
-            cosine_result_text += f"filename = {key} \n"
-            for term_docs in result['term_frequency_v2']:
-                for index in range(len(term_docs)):
-                    if(index == 0):
-                        cosine_result_text += f"keyword tf :{term_docs[index]} \n"
-                    elif(index == 1):
-                        cosine_result_text += f"{key} tf {term_docs[index]} \n\n"
+        
+        for i,term_docs in enumerate(result['term_frequency_v2']):
+            cosine_result_text += f"filename = {self.documents[i].filename} \n"
+            for index in range(len(term_docs)):
+                if(index == 0):
+                    cosine_result_text += f"keyword tf :{term_docs[index]} \n"
+                elif(index == 1):
+                    cosine_result_text += f"{self.documents[i].filename} tf {term_docs[index]} \n"
+            cosine_result_text+= f" key matrix : {result['keyword_term_matrix']}\n"
+            cosine_result_text+= f" docs matrix : {result['document_term_matrix'][i]}\n\n"
 
         self.txt_cosine_result.setText(cosine_result_text)
 

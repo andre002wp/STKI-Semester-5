@@ -14,7 +14,7 @@ class N_Gram:
         #document is passed
         self.documents = _documents
 
-    def query(self, q: 'str',n:'int') -> 'list[Document]':
+    def query(self, q: 'str',n:'int' = 2) -> 'list[Document]':
         parsed = ApalahParser.parse(q)
         self.keywords:'list[str]'= []
         for i, token in enumerate(parsed.token):
@@ -37,6 +37,18 @@ class N_Gram:
         # print(self.result_docs['ngram_coef_result'])
         return self.result_docs
 
+
+    # output berupa keyword berbentuk n-kata
+    def generate_ngrams(self,s: 'str', n:'int')-> 'list[Document]':
+        ngrams = zip(*[s[i:] for i in range(n)])
+        return [" ".join(ngram) for ngram in ngrams]
+
+    def generate_document_ngrams(self, documents: 'list[Document]', n:'int')-> 'list[Document]':
+        documents_gram = []
+        for document in documents:
+            documents_gram.append(self.generate_ngrams(document.tokenized,n))
+        return documents_gram
+
     def getUnionGram(self):
         union_docs = []
         # untuk setiap dokumen
@@ -48,18 +60,6 @@ class N_Gram:
                 temp_union[tokens] = 1
             union_docs.append(temp_union)
         return union_docs
-
-    def generate_document_ngrams(self, documents: 'list[Document]', n:'int')-> 'list[Document]':
-        documents_gram = []
-        for document in documents:
-            documents_gram.append(self.generate_ngrams(document.tokenized,n))
-        return documents_gram
-
-
-    # output berupa keyword berbentuk n-kata
-    def generate_ngrams(self,s: 'str', n:'int')-> 'list[Document]':
-        ngrams = zip(*[s[i:] for i in range(n)])
-        return [" ".join(ngram) for ngram in ngrams]
 
     def getNGram(self):
         term_Similarity = []

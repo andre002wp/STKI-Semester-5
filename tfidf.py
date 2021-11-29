@@ -29,10 +29,24 @@ class TF_IDF:
         self.idf_plus: 'list[float]' = self.getIDF_plus(self.idf)
         self.Weight: 'list[float]' = self.getWeight(self.term_Frequency,self.idf_plus)
         self.totalWeight:'list[float]' = self.getDocumentRelevance(self.Weight)
+        # print("TF")
+        # print(self.term_Frequency)
+        # print("Df")
+        # print(self.document_Frequency)
+        # print("D/Df")
+        # print(self.d_over_df)
+        # print("IDF")
+        # print(self.idf)
+        # print("IDF+1")
+        # print(self.idf_plus)
+        # print("Weight")
+        # print(self.Weight)
+        # print("Total")
+        # print(self.totalWeight)
         return self.result_docs
         
 
-    def getTF(self):
+    def getTF(self)-> 'list[int]':
         term_Frequency = []
         for key in self.keywords:
             temp_TF_d_keyword = []
@@ -49,7 +63,7 @@ class TF_IDF:
         self.result_docs['term_Frequency'] = term_Frequency
         return term_Frequency
 
-    def getDF(self,term_Frequency):
+    def getDF(self,term_Frequency)->'list[int]':
         document_Frequency = []
         for key_frequency in term_Frequency:
             count = 0
@@ -60,7 +74,7 @@ class TF_IDF:
         self.result_docs['document_Frequency'] = document_Frequency
         return document_Frequency
 
-    def getD_over_Df(self,document_Frequency):
+    def getD_over_Df(self,document_Frequency)->'list[float]':
         D_over_df = []
         for keys in document_Frequency:
             try:
@@ -70,7 +84,7 @@ class TF_IDF:
         self.result_docs['d_over_df'] = D_over_df
         return D_over_df
 
-    def getIDF(self,document_Frequency,d_over_df):
+    def getIDF(self,document_Frequency,d_over_df)->'list[float]':
         idf_keys = []
         for i,keys in enumerate(document_Frequency):
             try:
@@ -80,14 +94,14 @@ class TF_IDF:
         self.result_docs['idf'] = idf_keys
         return idf_keys
         
-    def getIDF_plus(self,idf_value):
+    def getIDF_plus(self,idf_value)->'list[float]':
         idf_plus = []
         for num in idf_value:
             idf_plus.append(num+1)
         self.result_docs['idf_plus'] = idf_plus
         return idf_plus
 
-    def getWeight(self,term_Frequency,idf_plus):
+    def getWeight(self,term_Frequency,idf_plus)->'list[float]':
         Weight_keys = []
         for i,keys in enumerate(term_Frequency):
             temp_weight_for_key_in_doc = []
@@ -97,7 +111,7 @@ class TF_IDF:
         self.result_docs['weight_keys'] = Weight_keys
         return Weight_keys
 
-    def getDocumentRelevance(self,document_weight):
+    def getDocumentRelevance(self,document_weight)->'list[dict]':
         total = []
         for i,weight in enumerate(document_weight):
             if(i==0): # how do you declare 3int list then update the num

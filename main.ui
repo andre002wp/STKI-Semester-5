@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1190</width>
+    <width>1093</width>
     <height>649</height>
    </rect>
   </property>
@@ -243,7 +243,7 @@
            </sizepolicy>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>7</number>
           </property>
           <widget class="QWidget" name="tab">
            <property name="sizePolicy">
@@ -570,168 +570,181 @@
            <attribute name="title">
             <string>Jaccard</string>
            </attribute>
-           <widget class="QTextEdit" name="txt_jaccard_result">
-            <property name="geometry">
-             <rect>
-              <x>28</x>
-              <y>26</y>
-              <width>811</width>
-              <height>261</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QTableWidget" name="jaccard_result_table">
-            <property name="geometry">
-             <rect>
-              <x>30</x>
-              <y>310</y>
-              <width>811</width>
-              <height>181</height>
-             </rect>
-            </property>
-            <column>
-             <property name="text">
-              <string>Document Name</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Similarity</string>
-             </property>
-            </column>
-           </widget>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QTextEdit" name="txt_jaccard_result">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QTableWidget" name="jaccard_result_table">
+              <column>
+               <property name="text">
+                <string>Document Name</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Similarity</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tab_6">
            <attribute name="title">
             <string>N-Gram</string>
            </attribute>
-           <widget class="QTableWidget" name="n_gram_result_table">
-            <property name="geometry">
-             <rect>
-              <x>30</x>
-              <y>310</y>
-              <width>811</width>
-              <height>181</height>
-             </rect>
-            </property>
-            <column>
-             <property name="text">
-              <string>Document Name</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Similarity</string>
-             </property>
-            </column>
-           </widget>
-           <widget class="QTextEdit" name="txt_ngram_result">
-            <property name="geometry">
-             <rect>
-              <x>28</x>
-              <y>46</y>
-              <width>811</width>
-              <height>241</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QWidget" name="horizontalLayoutWidget">
-            <property name="geometry">
-             <rect>
-              <x>30</x>
-              <y>10</y>
-              <width>184</width>
-              <height>32</height>
-             </rect>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QLabel" name="label_6">
-               <property name="maximumSize">
-                <size>
-                 <width>400</width>
-                 <height>16777215</height>
-                </size>
-               </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="sizeConstraint">
+               <enum>QLayout::SetDefaultConstraint</enum>
+              </property>
+              <property name="rightMargin">
+               <number>100</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_6">
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Input N for Ngram :</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="txt_input_ngram">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="placeholderText">
+                 <string>(number)</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <widget class="QTableWidget" name="n_gram_result_table">
+              <column>
                <property name="text">
-                <string>Input N for Ngram :</string>
+                <string>Document Name</string>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="txt_input_ngram">
-               <property name="maximumSize">
-                <size>
-                 <width>80</width>
-                 <height>16777215</height>
-                </size>
+              </column>
+              <column>
+               <property name="text">
+                <string>Similarity</string>
                </property>
-               <property name="placeholderText">
-                <string>(number)</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
+              </column>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QTextEdit" name="txt_ngram_result">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tab_7">
            <attribute name="title">
             <string>Cosine Sim</string>
            </attribute>
-           <widget class="QTextEdit" name="txt_cosine_result">
-            <property name="geometry">
-             <rect>
-              <x>28</x>
-              <y>26</y>
-              <width>811</width>
-              <height>261</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-             </font>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QTableWidget" name="cosine_result_table">
-            <property name="geometry">
-             <rect>
-              <x>30</x>
-              <y>310</y>
-              <width>811</width>
-              <height>181</height>
-             </rect>
-            </property>
-            <column>
-             <property name="text">
-              <string>Document Name</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Similarity</string>
-             </property>
-            </column>
-           </widget>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QTextEdit" name="txt_cosine_result">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QTableWidget" name="cosine_result_table">
+              <column>
+               <property name="text">
+                <string>Document Name</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Similarity</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_8">
+           <attribute name="title">
+            <string>DROPT</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QTextEdit" name="txt_dropt_result">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QTableWidget" name="dropt_result_table">
+              <column>
+               <property name="text">
+                <string>Document Name</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Similarity</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
@@ -746,8 +759,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1190</width>
-     <height>24</height>
+     <width>1093</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>
