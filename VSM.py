@@ -35,8 +35,8 @@ class VSM:
         self.result_docs['similarity'] = self.getSimilarity()
         # print("weight_Dj_query")
         # print(self.result_docs['weight_Dj_query'])
-        print("document_TF")
-        print(self.result_docs['document_TF'])
+        # print("document_TF")
+        # print(self.result_docs['document_TF'])
         return self.result_docs
 
     def _getDocumentDict(self):
