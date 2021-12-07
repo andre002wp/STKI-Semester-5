@@ -10,7 +10,7 @@ from tfidf import TF_IDF
 from jaccard import Jaccard
 from n_gram import N_Gram
 from cosine_sim import CosineSim
-from DROPT import DROPT
+from VSM import VSM
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -105,13 +105,21 @@ class Ui(QtWidgets.QMainWindow):
         self.txt_cosine_result = self.findChild(
             QtWidgets.QTextEdit, 'txt_cosine_result')
 
-        # dropt_table
-        self.result_tabledropt = self.findChild(
-            QtWidgets.QTableWidget, 'dropt_result_table')
-        self.result_tabledropt.setColumnWidth(0, 400)
-        self.result_tabledropt.setColumnWidth(1, 200)
-        self.txt_dropt_result = self.findChild(
-            QtWidgets.QTextEdit, 'txt_dropt_result')
+        # vsm_table
+        self.result_tableVSM = self.findChild(
+            QtWidgets.QTableWidget, 'VSM_table')
+        self.result_tableVSM.setColumnWidth(0, 200)
+        self.result_tableVSM.setColumnWidth(1, 250)
+        self.result_tableVSM.setColumnWidth(2, 100)
+        self.result_tableVSM.setColumnWidth(3, 100)
+        self.result_tableVSM.setColumnWidth(4, 250)
+        self.result_tableVSM.setColumnWidth(5, 250)
+        self.result_tableVSM.setColumnWidth(6, 250)
+
+        self.result_tableVSM2 = self.findChild(
+            QtWidgets.QTableWidget, 'vsm_result_table')
+        self.result_tableVSM2.setColumnWidth(0, 400)
+        self.result_tableVSM2.setColumnWidth(1, 200)
 
         self.tbl_inverted = self.findChild(
             QtWidgets.QTableWidget, 'inverted_index_table')
@@ -183,9 +191,9 @@ class Ui(QtWidgets.QMainWindow):
         self.cosineSim = CosineSim()
         self.cosineSim.index(self.documents)
     
-    def indexDropt(self):
-        self.dropt = DROPT()
-        self.dropt.index(self.documents)
+    def indexVSM(self):
+        self.vsm = VSM()
+        self.vsm.index(self.documents)
 
         
 
@@ -316,7 +324,7 @@ class Ui(QtWidgets.QMainWindow):
         resultCosine = self.cosineSim.query(q)
         self.__setCosineTable(resultCosine)
 
-    def queryDropt(self):
+    def queryVSM(self):
         q = self.txt_keyword.toPlainText()
         if len(q) == 0:
             print("Keyword tidak boleh kosong")
@@ -326,8 +334,8 @@ class Ui(QtWidgets.QMainWindow):
             print("Dokumen belum di index")
             return
 
-        resultDropt = self.dropt.query(q)
-        # self.__setCosineTable(resultDropt)
+        resultVSM = self.vsm.query(q)
+        self.__setVSMTable(resultVSM)
 
     # ================ BUTTON HANDLER =================
 
@@ -344,7 +352,7 @@ class Ui(QtWidgets.QMainWindow):
         # CosineSim
         self.queryCosineSim()
         # DROPT
-        self.queryDropt()
+        self.queryVSM()
 
     def OpenFile(self):
         files = QFileDialog.getOpenFileNames(
@@ -391,7 +399,7 @@ class Ui(QtWidgets.QMainWindow):
         self.indexjaccard()
         self.indexN_gram()
         self.indexCosine()
-        self.indexDropt()
+        self.indexVSM()
 
     # ================ HELPER =================
 
@@ -425,6 +433,7 @@ class Ui(QtWidgets.QMainWindow):
                 rows, 6, QtWidgets.QTableWidgetItem(str(weight_print)))
             rows += 1
 
+        #tabel kedua
         self.result_tableIDF2.setRowCount(len(result_idf['tfidf_coef_result']))
         rows = 0
         for key, value in result_idf['tfidf_coef_result'].items():
@@ -536,45 +545,57 @@ class Ui(QtWidgets.QMainWindow):
             self.result_tablecosine.setItem(
                 rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
             rows += 1
+    
+    def __setVSMTable(self, result: 'dict'):
+        # tabel Pertama
+        self.result_tableVSM.setRowCount(len(result['document_Dict']))
+        rows = 0
+        for index,term in enumerate(result['document_Dict'].keys()):
+            self.result_tableVSM.setSpan(rows, 0, 1, 1)
+            self.result_tableVSM.setItem(
+                rows, 0, QtWidgets.QTableWidgetItem(str(term)))
+            __printhelper = ""
+            __printhelper += "[ "
+            for document in result['document_TF']:
+                __printhelper += str("{:0.2f}".format(document[term]))+" "
+            __printhelper +="]"
+            self.result_tableVSM.setItem(
+                rows, 1, QtWidgets.QTableWidgetItem(__printhelper))
+            self.result_tableVSM.setItem(
+                rows, 2, QtWidgets.QTableWidgetItem(str(result['document_frequency'][term])))
+            self.result_tableVSM.setItem(
+                rows, 3, QtWidgets.QTableWidgetItem(str(result['document_idf'][term])))
+            __printhelper = ""
+            __printhelper += "[ "
+            for document in result['document_weight']:
+                __printhelper += str("{:0.2f}".format(document[term]))+" "
+            __printhelper +="]"
+            self.result_tableVSM.setItem(
+                rows, 4, QtWidgets.QTableWidgetItem(__printhelper))
+            __printhelper = ""
+            __printhelper += "[ TF : "
+            __printhelper += str(result['query_TF'][term])+" Weight : "
+            __printhelper += str("{:0.2f}".format(result['query_weight'][term]))+" "
+            __printhelper +="]"
+            self.result_tableVSM.setItem(
+                rows, 5, QtWidgets.QTableWidgetItem(__printhelper))
+            __printhelper = ""
+            __printhelper += "[ "
+            for document in result['weight_Dj_query']:
+                __printhelper += str("{:0.2f}".format(document[term]))+" "
+            __printhelper +="]"
+            self.result_tableVSM.setItem(
+                rows, 6, QtWidgets.QTableWidgetItem(__printhelper))
+            rows += 1
 
-    # def __setCosineTable(self, result):
-    #     cosine_result_text:str = ""
-    #     for idx,docs in enumerate(result['term_Similarity']):
-    #         #print nama file
-    #         cosine_result_text += f"file : {self.documents[idx].filename}\n"
-    #         #print A intersect B
-    #         cosine_result_text += "A \u2229 B :"
-    #         cosine_result_text += "{ "
-    #         for item,sub in docs.items():
-    #             if(list(docs)[-1] == item):
-    #                 cosine_result_text += str(item)+" "
-    #             else:
-    #                 cosine_result_text += str(item)+", "
-    #         cosine_result_text += "}\n"
-
-    #         #print A U B
-    #         cosine_result_text += "A U B :"
-    #         cosine_result_text += "{ "
-    #         for item,sub in result['union_docs'][idx].items():
-    #             if(list(result['union_docs'][idx])[-1] == item):
-    #                 cosine_result_text += str(item)+" "
-    #             else:
-    #                 cosine_result_text += str(item)+", "
-    #         cosine_result_text += "}\n"
-
-    #         #print result
-    #         cosine_result_text += f"result : {len(docs.items())}/{len(result['union_docs'][idx])} = {result['jaccard_coef_result'][self.documents[idx].filename]}\n\n"
-
-        # self.txt_cosine_result.setText(cosine_result_text)
-
-        # self.result_tablecosine.setRowCount(len(result['ngram_coef_result']))
-        # rows = 0
-        # for key,value in result['ngram_coef_result'].items():
-        #     self.result_tablecosine.setItem(
-        #         rows, 0, QtWidgets.QTableWidgetItem(str(key)))
-        #     self.result_tablecosine.setItem(
-        #         rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
-        #     rows += 1
+        self.result_tableVSM2.setRowCount(len(result['similarity']))
+        rows = 0
+        for key, value in result['similarity'].items():
+            self.result_tableVSM2.setItem(
+                rows, 0, QtWidgets.QTableWidgetItem(str(key)))
+            self.result_tableVSM2.setItem(
+                rows, 1, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(value))))
+            rows += 1
 
 
 app = QtWidgets.QApplication(sys.argv)
