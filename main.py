@@ -564,7 +564,7 @@ class Ui(QtWidgets.QMainWindow):
             self.result_tableVSM.setItem(
                 rows, 2, QtWidgets.QTableWidgetItem(str(result['document_frequency'][term])))
             self.result_tableVSM.setItem(
-                rows, 3, QtWidgets.QTableWidgetItem(str(result['document_idf'][term])))
+                rows, 3, QtWidgets.QTableWidgetItem(str("{:0.2f}".format(result['document_idf'][term]))))
             __printhelper = ""
             __printhelper += "[ "
             for document in result['document_weight']:

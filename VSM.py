@@ -85,14 +85,14 @@ class VSM:
                 _document_weight[term] = document[term] * self.result_docs['document_idf'][term]
             documents_weight.append(_document_weight)
 
-        sum_document_weight = []
+        distance_document = []
         for document in documents_weight:
             _sum = 0
             for _,value in document.items():
                 _sum += value*value
             _sum = math.sqrt(_sum)
-            sum_document_weight.append(_sum)
-        return documents_weight,sum_document_weight
+            distance_document.append(_sum)
+        return documents_weight,distance_document
 
     def QueryTF(self):
         queryTF = {}
