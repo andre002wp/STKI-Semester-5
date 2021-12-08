@@ -16,7 +16,8 @@ class VSM:
         self.documents = _documents
 
     def query(self, q: 'str') -> 'list[Document]':
-        parsed = ApalahParser.parse(q)
+        preprocess_query = Document.from_string(q)
+        parsed = ApalahParser.parse(preprocess_query.stemmed_str)
 
         self.keywords:'list[str]'= []
         for _, token in enumerate(parsed.token):
