@@ -41,7 +41,7 @@ class VSM:
         for document in self.documents:
             for token in document.stemmed:
                 if(token not in document_dict.keys()):
-                    document_dict[token] = document_dict
+                    document_dict[token] = token
         return document_dict
 
     def documentTF(self):
@@ -105,9 +105,8 @@ class VSM:
         query_weight = {}
         max_tf_value = max(self.result_docs['query_TF'].values())
         for term,values in self.result_docs['query_TF'].items():
-            for key in self.result_docs['document_Dict'].keys():
-                query_weight[term] = (values/max_tf_value) * self.result_docs['document_idf'][key]
-
+            query_weight[term] = (values/max_tf_value) * self.result_docs['document_idf'][term]
+            print(f"{term} : {query_weight[term]}")
         sum_query_weight = 0
         for value in query_weight.values():
             sum_query_weight += value*value

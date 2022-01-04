@@ -351,7 +351,7 @@ class Ui(QtWidgets.QMainWindow):
         self.queryNGram()
         # CosineSim
         self.queryCosineSim()
-        # DROPT
+        # VSM
         self.queryVSM()
 
     def OpenFile(self):
@@ -557,7 +557,7 @@ class Ui(QtWidgets.QMainWindow):
             __printhelper = ""
             __printhelper += "[ "
             for document in result['document_TF']:
-                __printhelper += str("{:0.2f}".format(document[term]))+" "
+                __printhelper += str(f"{document[term]}")+" "
             __printhelper +="]"
             self.result_tableVSM.setItem(
                 rows, 1, QtWidgets.QTableWidgetItem(__printhelper))
