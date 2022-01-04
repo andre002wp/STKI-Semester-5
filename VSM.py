@@ -106,7 +106,6 @@ class VSM:
         max_tf_value = max(self.result_docs['query_TF'].values())
         for term,values in self.result_docs['query_TF'].items():
             query_weight[term] = (values/max_tf_value) * self.result_docs['document_idf'][term]
-            print(f"{term} : {query_weight[term]}")
         sum_query_weight = 0
         for value in query_weight.values():
             sum_query_weight += value*value
