@@ -334,8 +334,11 @@ class Ui(QtWidgets.QMainWindow):
             print("Dokumen belum di index")
             return
 
-        resultVSM = self.vsm.query(q)
-        self.__setVSMTable(resultVSM)
+        try:
+            resultVSM = self.vsm.query(q)
+            self.__setVSMTable(resultVSM)
+        except:
+            print("Failed")
 
     # ================ BUTTON HANDLER =================
 

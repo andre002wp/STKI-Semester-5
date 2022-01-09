@@ -1,0 +1,1 @@
+Contoh marketing OR library. Dengan query tersebut maka kita akan mendapatkan dokumen yang mengandung unsur marketing saja, perpustakaan saja atau yang mengandung unsur marketing dan perpustakaan.

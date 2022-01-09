@@ -17,6 +17,7 @@ class VSM:
 
     def query(self, q: 'str') -> 'list[Document]':
         preprocess_query = Document.from_string(q)
+        print(preprocess_query.stemmed_str)
         parsed = ApalahParser.parse(preprocess_query.stemmed_str)
 
         self.keywords:'list[str]'= []
@@ -34,6 +35,23 @@ class VSM:
         self.result_docs['weight_Dj_query'],self.result_docs['sum_Dj_query'] = self.WeightDjQ()
         self.result_docs['distance_Dj_query'] = self.DistanceDjQ()
         self.result_docs['similarity'] = self.getSimilarity()
+
+        print("TF")
+        print(self.documentTF())
+        print("IDF")
+        print(self.documentTF())
+        print("Weight")
+        print(self.documentTF())
+        print("Distance")
+        print(self.documentTF())
+        print("TF")
+        print(self.documentTF())
+        print("TF")
+        print(self.documentTF())
+        print("TF")
+        print(self.documentTF())
+
+
         return self.result_docs
 
     def _getDocumentDict(self):
