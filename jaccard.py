@@ -15,7 +15,7 @@ class Jaccard:
         self.documents = _documents
 
     def query(self, q: 'str') -> 'list[Document]':
-        parsed = ApalahParser.parse(q)
+        parsed = ApalahParser.parse(q.lower())
         self.keywords:'list[str]'= []
         for i, token in enumerate(parsed.token):
             if not token.is_symbol:

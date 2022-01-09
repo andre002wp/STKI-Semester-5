@@ -16,7 +16,7 @@ class VSM:
         self.documents = _documents
 
     def query(self, q: 'str') -> 'list[Document]':
-        preprocess_query = Document.from_string(q)
+        preprocess_query = Document.from_string(q.lower())
         print(preprocess_query.stemmed_str)
         parsed = ApalahParser.parse(preprocess_query.stemmed_str)
 
@@ -36,20 +36,20 @@ class VSM:
         self.result_docs['distance_Dj_query'] = self.DistanceDjQ()
         self.result_docs['similarity'] = self.getSimilarity()
 
-        print("TF")
-        print(self.documentTF())
-        print("IDF")
-        print(self.documentTF())
-        print("Weight")
-        print(self.documentTF())
-        print("Distance")
-        print(self.documentTF())
-        print("TF")
-        print(self.documentTF())
-        print("TF")
-        print(self.documentTF())
-        print("TF")
-        print(self.documentTF())
+        # print("TF")
+        # print(self.documentTF())
+        # print("IDF")
+        # print(self.documentTF())
+        # print("Weight")
+        # print(self.documentTF())
+        # print("Distance")
+        # print(self.documentTF())
+        # print("TF")
+        # print(self.documentTF())
+        # print("TF")
+        # print(self.documentTF())
+        # print("TF")
+        # print(self.documentTF())
 
 
         return self.result_docs

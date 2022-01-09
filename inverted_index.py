@@ -90,7 +90,7 @@ class BooleanModelInvertedIndex:  # Inverted Index
             raise Exception("Lakukan indexing sebelum mengquery")
 
         # region Parsing Query
-        parsed = ApalahParser.parse(q)
+        parsed = ApalahParser.parse(q.lower())
         for i, token in enumerate(parsed.token):
             if not token.is_symbol:
                 b = self.__keyword_to_binary(token.token)

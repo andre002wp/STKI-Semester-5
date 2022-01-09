@@ -16,7 +16,7 @@ class CosineSim:
         self.documents = _documents
 
     def query(self, q: 'str') -> 'list[Document]':
-        parsed = ApalahParser.parse(q)
+        parsed = ApalahParser.parse(q.lower())
         # print("TOKEN: ", parsed.token)
 
         self.keywords:'list[str]'= []

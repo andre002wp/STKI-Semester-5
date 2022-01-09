@@ -57,10 +57,10 @@ class BooleanModelIncidentMatrix:  # Incident Matrix
         if self.incident_matrix == None:
             raise Exception("Lakukan indexing sebelum mengquery")
 
-        print(self.incident_matrix)
+        # print(self.incident_matrix)
 
         # region Parsing Query
-        parsed = ApalahParser.parse(q)
+        parsed = ApalahParser.parse(q.lower())
         for i, token in enumerate(parsed.token):
             if not token.is_symbol:
                 # b = self.__keyword_to_binary(token.token)
