@@ -36,21 +36,6 @@ class VSM:
         self.result_docs['distance_Dj_query'] = self.DistanceDjQ()
         self.result_docs['similarity'] = self.getSimilarity()
 
-        # print("TF")
-        # print(self.documentTF())
-        # print("IDF")
-        # print(self.documentTF())
-        # print("Weight")
-        # print(self.documentTF())
-        # print("Distance")
-        # print(self.documentTF())
-        # print("TF")
-        # print(self.documentTF())
-        # print("TF")
-        # print(self.documentTF())
-        # print("TF")
-        # print(self.documentTF())
-
 
         return self.result_docs
 

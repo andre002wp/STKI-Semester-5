@@ -46,7 +46,7 @@ class Document:
         f.raw = source
         f.folded = f.raw.lower()
         f.no_number = re.sub(r"\d+", " ", f.folded)
-        f.no_symbol = re.sub("[^a-zA-Z0-9\n\.]", " ", f.no_number)
+        f.no_symbol = re.sub(r"[^a-zA-Z0-9\n\.]", " ", f.no_number).replace(".", "")
         f.trimmed = f.no_symbol.strip()
         f.tokenized = f.trimmed.split()
 
